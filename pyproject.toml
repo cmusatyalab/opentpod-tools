@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "tpod-tools"
+version = "0.1.0"
+description = "Command line tools integrating OpenTPOD functionality"
+license = "Apache-2.0"
+authors = [
+    "Jan Harkes <jaharkes@cs.cmu.edu>",
+]
+#repository = "https://github.com/cmusatyalab/tpod-tools/"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+ConfigArgParse = "^1.2.3"
+requests = "^2.24.0"
+tqdm = "^4.50.2"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.4"
+pylint = "^2.6.0"
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+tpod-download = "tpod_tools.download:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
