@@ -14,62 +14,62 @@ import requests
 from tqdm.auto import tqdm
 
 
-def cvat_export_dataset(
-    cvat_url,
-    task_id,
-    dataset_format,
-    auth=None,
-    position=0,
-):
+def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=None):
     """Download a dataset from CVAT"""
 
+    with requests.Session() as session:
+        session.auth = auth
+
+        url = f"{cvat_url}/api/v1/tasks/{task_id}/dataset"
+        params = {"format": dataset_format}
+        creating = True
+
+        # request export of the dataset and wait for it to be ready
+        while True:
+            with session.get(url, params=params, stream=True) as response:
+                response.raise_for_status()
+
+                if response.status_code == 200:
+                    # file is ready for download
+                    # switch progress bar from 'waiting for' to 'downloading'
+                    if progress is not None:
+                        progress.reset()
+                        progress.total = int(response.headers.get("Content-Length", 0))
+                        progress.unit = "B"
+                        progress.unit_scale = True
+                        progress.unit_divisor = 1024
+                        progress.set_description(f"Download dataset {task_id}")
+
+                    # download exported dataset
+                    with open(f"dataset_{task_id}.zip", "wb") as output_file:
+                        for chunk in response.iter_content(chunk_size=4096):
+                            output_file.write(chunk)
+                            if progress is not None:
+                                progress.update(len(chunk))
+                    break
+
+            if creating:
+                params["action"] = "download"
+                creating = False
+                continue
+
+            if progress is not None:
+                progress.update(0)
+            time.sleep(1)
+
+
+def _cvat_export_dataset_cli(cvat_url, task_id, dataset_format, auth, position):
+    """Download a dataset from CVAT (with progress bar)"""
     with tqdm(
-        desc="Exporting dataset for task {}".format(task_id),
+        desc=f"Exporting dataset for task {task_id}",
         position=position,
         leave=False,
     ) as pbar:
-        with requests.Session() as session:
-            if auth:
-                session.auth = auth
+        try:
+            cvat_export_dataset(cvat_url, task_id, dataset_format, auth, progress=pbar)
 
-            url = "{}/api/v1/tasks/{}/dataset".format(cvat_url, task_id)
-            params = {"format": dataset_format}
-            creating = True
-
-            try:
-                # request export of the dataset and wait for it to be ready
-                while True:
-                    response = session.get(url, params=params, stream=True)
-                    response.raise_for_status()
-
-                    if response.status_code == 200:
-                        # file is ready for download
-                        break
-
-                    if response.ok and creating:
-                        params["action"] = "download"
-                        creating = False
-                        continue
-
-                    time.sleep(1)
-                    pbar.update(0)
-
-                # switch progress bar from 'waiting for' to 'downloading' dataset
-                pbar.reset()
-                pbar.total = int(response.headers.get("Content-Length", 0))
-                pbar.unit = "B"
-                pbar.unit_scale = True
-                pbar.unit_divisor = 1024
-                pbar.set_description("Download dataset {}".format(task_id))
-
-                # download exported dataset
-                with open("dataset_{}.zip".format(task_id), "wb") as output_file:
-                    for chunk in response.iter_content(chunk_size=4096):
-                        output_file.write(chunk)
-                        pbar.update(len(chunk))
-
-            except requests.exceptions.HTTPError as exc:
-                tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
+        except requests.exceptions.HTTPError as exc:
+            tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
 
 
 def main():
@@ -98,17 +98,17 @@ def main():
         "mot": "MOT 1.1",
         "tfrecord": "TFRecord 1.0",
         "yolo": "YOLO 1.1",
-    }.get(args.format) or args.format
+    }.get(args.format, args.format)
 
     _auth = (args.username, args.password) if args.username or args.password else None
 
     export_dataset = partial(
-        cvat_export_dataset, args.url, dataset_format=_format, auth=_auth
+        _cvat_export_dataset_cli, args.url, dataset_format=_format, auth=_auth
     )
 
-    with ThreadPoolExecutor() as p:
-        for n, task in enumerate(args.task_id, 1):
-            p.submit(export_dataset, task, position=n)
+    with ThreadPoolExecutor() as pool:
+        for position, task in enumerate(args.task_id, 1):
+            pool.submit(export_dataset, task, position=position)
 
 
 if __name__ == "__main__":
