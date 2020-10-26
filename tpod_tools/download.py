@@ -17,11 +17,22 @@ from tqdm.auto import tqdm
 def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=None):
     """Download a dataset from CVAT"""
 
+    _format = {
+        "datumaro": "Datumaro 1.0",
+        "coco": "COCO 1.0",
+        "pascal": "PASCAL VOC 1.1",
+        "labelme": "LabelMe 3.0",
+        "mask": "Segmentation mask 1.1",
+        "mot": "MOT 1.1",
+        "tfrecord": "TFRecord 1.0",
+        "yolo": "YOLO 1.1",
+    }.get(dataset_format, dataset_format)
+
     with requests.Session() as session:
         session.auth = auth
 
         url = f"{cvat_url}/api/v1/tasks/{task_id}/dataset"
-        params = {"format": dataset_format}
+        params = {"format": _format}
         creating = True
 
         # request export of the dataset and wait for it to be ready
@@ -41,7 +52,7 @@ def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=N
                         progress.set_description(f"Download dataset {task_id}")
 
                     # download exported dataset
-                    with open(f"dataset_{task_id}.zip", "wb") as output_file:
+                    with open(f"{dataset_format}_{task_id}.zip", "wb") as output_file:
                         for chunk in response.iter_content(chunk_size=4096):
                             output_file.write(chunk)
                             if progress is not None:
@@ -79,31 +90,23 @@ def main():
     parser.add_argument("--url", required=True, help="base URL of CVAT installation")
     parser.add_argument("--username", help="CVAT login username")
     parser.add_argument("--password", help="CVAT login password")
-    parser.add_argument("-v", "--verbose", action="store_true", help="verbose")
     parser.add_argument(
         "--format",
-        default="pascal",
-        help="dataset format [coco, pascal, labelme, mask, mot, tfrecord, yolo]",
+        default="datumaro",
+        help=""" \
+             dataset format [datumaro, coco, pascal, labelme, mask, mot, tfrecord, \
+             yolo] (defaults to datumaro) \
+        """,
     )
     parser.add_argument(
         "task_id", type=int, nargs="+", help="task id of dataset to download"
     )
     args = parser.parse_args()
 
-    _format = {
-        "coco": "COCO 1.0",
-        "pascal": "PASCAL VOC 1.1",
-        "labelme": "LabelMe 3.0",
-        "mask": "Segmentation mask 1.1",
-        "mot": "MOT 1.1",
-        "tfrecord": "TFRecord 1.0",
-        "yolo": "YOLO 1.1",
-    }.get(args.format, args.format)
-
     _auth = (args.username, args.password) if args.username or args.password else None
 
     export_dataset = partial(
-        _cvat_export_dataset_cli, args.url, dataset_format=_format, auth=_auth
+        _cvat_export_dataset_cli, args.url, dataset_format=args.format, auth=_auth
     )
 
     with ThreadPoolExecutor() as pool:
