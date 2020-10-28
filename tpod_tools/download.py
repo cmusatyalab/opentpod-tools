@@ -7,14 +7,17 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
+import os
+from pathlib import Path
 import time
+import zipfile
 
 import configargparse
 import requests
 from tqdm.auto import tqdm
 
 
-def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=None):
+def cvat_export_dataset(cvat_params, task_id, output, dataset_format, progress=None):
     """Download a dataset from CVAT"""
 
     _format = {
@@ -29,6 +32,7 @@ def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=N
     }.get(dataset_format, dataset_format)
 
     with requests.Session() as session:
+        cvat_url, auth = cvat_params
         session.auth = auth
 
         url = f"{cvat_url}/api/v1/tasks/{task_id}/dataset"
@@ -52,7 +56,7 @@ def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=N
                         progress.set_description(f"Download dataset {task_id}")
 
                     # download exported dataset
-                    with open(f"{dataset_format}_{task_id}.zip", "wb") as output_file:
+                    with open(output, "wb") as output_file:
                         for chunk in response.iter_content(chunk_size=4096):
                             output_file.write(chunk)
                             if progress is not None:
@@ -69,18 +73,47 @@ def cvat_export_dataset(cvat_url, task_id, dataset_format, auth=None, progress=N
             time.sleep(1)
 
 
-def _cvat_export_dataset_cli(cvat_url, task_id, dataset_format, auth, position):
+def unzip_dataset(dataset):
+    """Unzip a zip archive and remove the file"""
+    output_dir = Path(dataset.stem)
+    output_dir.mkdir()
+
+    with zipfile.ZipFile(dataset) as archive:
+        archive.extractall(path=output_dir)
+        # members = archive.infolist()
+        # for zipinfo in members:
+        #    archive.extract(zipinfo, output_dir)
+
+    os.unlink(dataset)
+
+
+def _cvat_export_dataset_cli(
+    cvat_params, task_id, dataset_format, position, unzip=False
+):
     """Download a dataset from CVAT (with progress bar)"""
+
+    output = Path(f"{dataset_format}_{task_id}")
+    output_zip = output.with_suffix(".zip")
+    if output.exists():
+        print(f"{output} already exists, skipping download")
+        return
+
     with tqdm(
         desc=f"Exporting dataset for task {task_id}",
         position=position,
         leave=False,
     ) as pbar:
         try:
-            cvat_export_dataset(cvat_url, task_id, dataset_format, auth, progress=pbar)
+            cvat_export_dataset(
+                cvat_params, task_id, output_zip, dataset_format, progress=pbar
+            )
 
         except requests.exceptions.HTTPError as exc:
             tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
+
+        if unzip:
+            tqdm.write(f"Unpacking {output_zip}")
+            unzip_dataset(output_zip)
 
 
 def main():
@@ -90,6 +123,9 @@ def main():
     parser.add_argument("--url", required=True, help="base URL of CVAT installation")
     parser.add_argument("--username", help="CVAT login username")
     parser.add_argument("--password", help="CVAT login password")
+    parser.add_argument(
+        "--unzip", action="store_true", help="Unzip datasets after download"
+    )
     parser.add_argument(
         "--format",
         default="datumaro",
@@ -106,12 +142,12 @@ def main():
     _auth = (args.username, args.password) if args.username or args.password else None
 
     export_dataset = partial(
-        _cvat_export_dataset_cli, args.url, dataset_format=args.format, auth=_auth
+        _cvat_export_dataset_cli, (args.url, _auth), dataset_format=args.format
     )
 
     with ThreadPoolExecutor() as pool:
         for position, task in enumerate(args.task_id, 1):
-            pool.submit(export_dataset, task, position=position)
+            pool.submit(export_dataset, task, position=position, unzip=args.unzip)
 
 
 if __name__ == "__main__":
