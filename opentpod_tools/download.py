@@ -118,7 +118,7 @@ def _cvat_export_dataset_cli(
 
 def main():
     """Download dataset from CVAT (CLI)"""
-    parser = configargparse.ArgParser(default_config_files=["~/.tpod-tools"])
+    parser = configargparse.ArgParser(default_config_files=["~/.opentpod-tools"])
     parser.add_argument("-c", "--config", is_config_file=True, help="config file path")
     parser.add_argument("--url", required=True, help="base URL of CVAT installation")
     parser.add_argument("--username", help="CVAT login username")

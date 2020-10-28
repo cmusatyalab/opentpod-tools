@@ -15,7 +15,7 @@ for various dataset formats.
 configuration file
 ------------------
 
-You can create a config file in your home directory named `.tpod-tools` with
+You can create a config file in your home directory named `.opentpod-tools` with
 common settings such as the CVAT installation base url, username, and password.
 
     [cvat]
