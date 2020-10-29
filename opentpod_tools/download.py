@@ -88,7 +88,7 @@ def unzip_dataset(dataset):
 
 
 def _cvat_export_dataset_cli(
-    cvat_params, task_id, dataset_format, position, unzip=False
+    cvat_params, task_id, dataset_format, position, unzip=True
 ):
     """Download a dataset from CVAT (with progress bar)"""
 
@@ -124,7 +124,7 @@ def main():
     parser.add_argument("--username", help="CVAT login username")
     parser.add_argument("--password", help="CVAT login password")
     parser.add_argument(
-        "--unzip", action="store_true", help="Unzip datasets after download"
+        "--no-unzip", action="store_true", help="Do not unpack datasets after download"
     )
     parser.add_argument(
         "--format",
@@ -147,7 +147,9 @@ def main():
 
     with ThreadPoolExecutor() as pool:
         for position, task in enumerate(args.task_id, 1):
-            pool.submit(export_dataset, task, position=position, unzip=args.unzip)
+            pool.submit(
+                export_dataset, task, position=position, unzip=not args.no_unzip
+            )
 
 
 if __name__ == "__main__":
