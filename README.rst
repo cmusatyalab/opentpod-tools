@@ -12,7 +12,7 @@ is the backend used by CVAT to handle reading, writing, conversion, and merging
 for various dataset formats.
 
 
-configuration file
+Configuration file
 ------------------
 
 You can create a config file in your home directory named `.opentpod-tools` with
@@ -22,3 +22,25 @@ common settings such as the CVAT installation base url, username, and password.
     url = http://localhost:8080
     username = user
     password = pass
+
+
+Building
+--------
+
+This is my first attempt at using Poetry (https://python-poetry.org) to manage
+python package dependencies, so I may be doing everything wrong.
+
+But it should be possible to locally build this package as follows,
+
+    # install poetry, see https://python-poetry.org/docs/
+    # Make sure you install for python3
+    #
+    # I used (the not recommended): pip3 install --user poetry
+
+    git clone https://github.com/cmusatyalab/opentpod-tools.git
+    cd opentpod-tools
+    poetry install
+
+This will create a virtualenv with all the dependencies and installs
+opentpod-tools in that virtualenv.  You can start up a shell with the right
+virtualenv environment with `poetry shell` and work from there.
