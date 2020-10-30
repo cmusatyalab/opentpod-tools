@@ -18,6 +18,8 @@ Configuration file
 You can create a config file in your home directory named `.opentpod-tools` with
 common settings such as the CVAT installation base url, username, and password.
 
+.. code-block:: cfg
+
     [cvat]
     url = http://localhost:8080
     username = user
@@ -32,10 +34,12 @@ python package dependencies, so I may be doing everything wrong.
 
 But it should be possible to locally build this package as follows,
 
+.. code-block:: sh
+
     # install poetry, see https://python-poetry.org/docs/
     # Make sure you install for python3
     #
-    # I used (the not recommended): pip3 install --user poetry
+    # I used (the not recommended way): pip3 install --user poetry
 
     git clone https://github.com/cmusatyalab/opentpod-tools.git
     cd opentpod-tools
