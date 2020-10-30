@@ -1,4 +1,4 @@
-TPOD tools
+OpenTPOD tools
 ==========
 
 Collection of command line tools to assist with extracting, merging, and
