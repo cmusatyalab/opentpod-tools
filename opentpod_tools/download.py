@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 #
+#  Copyright (c) 2020 Carnegie Mellon University
+#  All rights reserved.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 """Download datasets from one or more CVAT tasks.
