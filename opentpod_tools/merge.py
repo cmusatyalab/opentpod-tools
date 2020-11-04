@@ -38,23 +38,26 @@ def detect_format(dataset_dir, args):
         try:
             match = importer.detect(os.fspath(dataset_dir))
             if match:
-                matches.append((format_name, importer))
+                matches.append(format_name)
         except NotImplementedError:
             pass
 
     if args.verbose:
         print(f"Found {matches} for {dataset_dir}")
 
+    # everything seems to match 'image_dir'....
+    matches = [m for m in matches if not m == "image_dir"]
+
     if len(matches) == 1:
         return matches[0]
 
-    assert False, "Unrecognized dataset format"
+    assert False, f"Unrecognized dataset format, {matches}"
     return None
 
 
 def project_path(dataset_path, suffix):
     """create predictable temporary project path name for dataset"""
-    return Path("merge_" + dataset_path.stem).with_suffix(suffix)
+    return Path("tmp_" + dataset_path.stem).with_suffix(suffix)
 
 
 def convert_to_datumaro(dataset_path, args):
@@ -65,7 +68,6 @@ def convert_to_datumaro(dataset_path, args):
         return dataset_path
 
     tmp_project_dir = project_path(dataset_path, ".datumaro")
-    cleanup_paths.append(tmp_project_dir)
 
     print(f"Converting {dataset_path} to datumaro format")
     project = Project.import_from(dataset_path, dataset_format)
@@ -73,8 +75,13 @@ def convert_to_datumaro(dataset_path, args):
     project.config.project_dir = str(tmp_project_dir)
 
     print("Checking dataset...")
-    _ = project.make_dataset()  # check dataset
-    project.save()
+    dataset = project.make_dataset()  # check dataset
+
+    # if dataset_format in ['tf_detection_api',...]:
+    print("Cloning data...")
+    dataset.save(merge=True, save_images=True)
+    # else:
+    #     project.save()
 
     return tmp_project_dir
 
@@ -122,7 +129,7 @@ def reindex(dataset_path, project_dir, start_index):
     return tmp_project_dir, len(dataset)
 
 
-def merge(cleaned_datasets, output):
+def merge(cleaned_datasets, output, save_images=False):
     """datum merge -o {output} {project_dirs}"""
 
     print(f"Merging datasets to {output}/")
@@ -144,7 +151,7 @@ def merge(cleaned_datasets, output):
     output_dataset = merged_project.make_dataset()
     output_dataset.define_categories(merged_dataset.categories())
     merged_dataset = output_dataset.update(merged_dataset)
-    merged_dataset.save(save_dir=merged_project_dir)
+    merged_dataset.save(save_dir=merged_project_dir, save_images=save_images)
 
 
 def main():
@@ -180,9 +187,13 @@ def main():
         # Run a couple of cleanup operations before trying to merge
         cleaned_datasets = []
         start_index = 0
+        imported = False
         for dataset in args.dataset:
             # convert all datasets to datumaro format
             project_dir = convert_to_datumaro(dataset, args)
+            if project_dir != dataset:
+                cleanup_paths.append(project_dir)
+                imported = True
 
             # remove frames with no annotations
             filtered = filter_empty_frames(dataset, project_dir)
@@ -195,7 +206,7 @@ def main():
             start_index += items
 
         # And then do the actual merge operation
-        merge(cleaned_datasets, output=args.output)
+        merge(cleaned_datasets, output=args.output, save_images=imported)
 
     finally:
         if not args.debug:
