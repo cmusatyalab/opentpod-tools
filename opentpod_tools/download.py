@@ -130,6 +130,7 @@ def main():
         "--no-unzip", action="store_true", help="Do not unpack datasets after download"
     )
     parser.add_argument(
+        "-f",
         "--format",
         default="datumaro",
         help=""" \
