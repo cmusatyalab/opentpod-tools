@@ -43,8 +43,42 @@ But it should be possible to locally build this package as follows,
 
     git clone https://github.com/cmusatyalab/opentpod-tools.git
     cd opentpod-tools
-    poetry install
+
+    # run either of the following
+    poetry install              # this installs tensorflow dependencies
+    poetry install -E tf-gpu    # this will install tensorflow-gpu
 
 This will create a virtualenv with all the dependencies and installs
 opentpod-tools in that virtualenv.  You can start up a shell with the right
 virtualenv environment with ``poetry shell`` and work from there.
+
+Whenever you update your checked out source tree, it is useful to re-run
+poetry install to pull in any updated dependencies as described in the new
+poetry.lock file.
+
+.. code-block:: sh
+
+    cd opentpod-tools
+    git pull
+    poetry install --remove-untracked [-E tf-gpu]
+
+
+Usage
+-----
+
+.. code-block:: sh
+
+    # upload videos to CVAT, and label
+
+    # download labeled datasets
+    tpod-download <dataset0> .. <datasetN>
+
+    # merge datasets
+    tpod-merge -o merged <dataset0> .. <datasetN>
+
+    # split into training and testing subsets
+    datum project transform -p merged -o split -t random_split -- -s train:0.9 -s eval:0.1
+
+    # export to tfrecord format
+    datum project export -p split -f tf_detection_api -o tfrecord
+

@@ -1,2 +1,13 @@
 /dist/
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.venv
+venv
+
+.DS_Store
+.AppleDouble
+.LSOverride
+._*

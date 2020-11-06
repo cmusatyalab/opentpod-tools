@@ -11,10 +11,18 @@ repository = "https://github.com/cmusatyalab/opentpod-tools/"
 [tool.poetry.dependencies]
 python = "^3.6"
 ConfigArgParse = "^1.2.3"
-datumaro = {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.2", extras = ["tf"]}
+datumaro = [
+    {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.2", extras = ["tf"], markers = "extra != 'tf-gpu'"},
+    {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.2", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
+]
 requests = "^2.24.0"
 tqdm = "^4.50.2"
-tensorflow = "~1.15.4"
+tensorflow = {version = "~1.15.4", optional = true }
+tensorflow-gpu = {version = "~1.15.4", optional = true }
+
+[tool.poetry.extras]
+tf = ["tensorflow"]
+tf-gpu = ["tensorflow-gpu"]
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
