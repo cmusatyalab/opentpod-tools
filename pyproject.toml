@@ -14,6 +14,7 @@ ConfigArgParse = "^1.2.3"
 datumaro = {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.2", extras = ["tf"]}
 requests = "^2.24.0"
 tqdm = "^4.50.2"
+tensorflow = "~1.15.4"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"
