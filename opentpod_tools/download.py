@@ -8,12 +8,12 @@
 """Download datasets from one or more CVAT tasks.
 """
 
-from concurrent.futures import ThreadPoolExecutor
-from functools import partial
 import os
-from pathlib import Path
 import time
 import zipfile
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
+from pathlib import Path
 
 import configargparse
 import requests

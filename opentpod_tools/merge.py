@@ -9,14 +9,14 @@
 """
 
 import os
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 import configargparse
 from tqdm import tqdm
-from datumaro.components.project import Environment, Project
-from datumaro.components.operations import IntersectMerge
 
+from datumaro.components.operations import IntersectMerge
+from datumaro.components.project import Environment, Project
 
 # list of temporary directories we created during the merge
 # which will have to be cleaned up after we're done
