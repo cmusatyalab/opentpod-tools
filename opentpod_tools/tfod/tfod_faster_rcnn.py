@@ -144,11 +144,11 @@ num_readers: 1
 
 
 class TFODFasterRCNNResNetGeneric(TFODDetector):
-    TRAINING_PARAMETERS = {'batch_size': 2, 'num_steps': 20000}
+    TRAINING_PARAMETERS = {"batch_size": 2, "num_steps": 20000}
 
     def __init__(self, config):
         super().__init__(config)
-        self._config['feature_extractor_type'] = self.feature_extractor_type
+        self._config["feature_extractor_type"] = self.feature_extractor_type
 
     @property
     def feature_extractor_type(self):
@@ -165,11 +165,11 @@ class TFODFasterRCNNResNet101(TFODFasterRCNNResNetGeneric):
 
     @property
     def pretrained_model_url(self):
-        return 'http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz'
+        return "http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz"
 
     @property
     def feature_extractor_type(self):
-        return 'faster_rcnn_resnet101'
+        return "faster_rcnn_resnet101"
 
 
 class TFODFasterRCNNResNet50(TFODFasterRCNNResNetGeneric):
@@ -178,8 +178,8 @@ class TFODFasterRCNNResNet50(TFODFasterRCNNResNetGeneric):
 
     @property
     def pretrained_model_url(self):
-        return 'http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet50_coco_2018_01_28.tar.gz'
+        return "http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet50_coco_2018_01_28.tar.gz"
 
     @property
     def feature_extractor_type(self):
-        return 'faster_rcnn_resnet50'
+        return "faster_rcnn_resnet50"

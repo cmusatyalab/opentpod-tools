@@ -196,14 +196,14 @@ eval_input_reader: {
 
 
 class TFODSSDMobileNetV2(TFODDetector):
-    TRAINING_PARAMETERS = {'batch_size': 2, 'num_steps': 20000}
+    TRAINING_PARAMETERS = {"batch_size": 2, "num_steps": 20000}
 
     def __init__(self, config):
         super().__init__(config)
 
     @property
     def pretrained_model_url(self):
-        return 'http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz'
+        return "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz"
 
     @property
     def pipeline_config_template(self):

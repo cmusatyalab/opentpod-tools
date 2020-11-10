@@ -18,10 +18,11 @@ from proxy.views import proxy_view
 from opentpod.object_detector.provider import utils
 
 
-class TFODDetector():
+class TFODDetector:
     """Tensorflow Object Detection API
     See: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_locally.md
     """
+
     TRAINING_PARAMETERS = {}
 
     def __init__(self, config):
@@ -43,18 +44,26 @@ class TFODDetector():
         """
         super().__init__()
         self._config = config
-        self._input_dir = pathlib.Path(self._config['input_dir'])
-        self._output_dir = pathlib.Path(self._config['output_dir'])
+        self._input_dir = pathlib.Path(self._config["input_dir"])
+        self._output_dir = pathlib.Path(self._config["output_dir"])
 
         # find appropriate model to finetune from
         self.cache_pretrained_model()
 
         # fill in on-disk file structure to config
-        self._config['pipeline_config_path'] = str(self._input_dir.resolve() / 'pipeline.config')
-        self._config['train_input_path'] = str(self._input_dir.resolve() / 'train.tfrecord')
-        self._config['eval_input_path'] = str(self._input_dir.resolve() / 'eval.tfrecord')
-        self._config['label_map_path'] = str(self._input_dir.resolve() / 'label_map.pbtxt')
-        self._config['meta'] = str(self._input_dir.resolve() / 'meta')
+        self._config["pipeline_config_path"] = str(
+            self._input_dir.resolve() / "pipeline.config"
+        )
+        self._config["train_input_path"] = str(
+            self._input_dir.resolve() / "train.tfrecord"
+        )
+        self._config["eval_input_path"] = str(
+            self._input_dir.resolve() / "eval.tfrecord"
+        )
+        self._config["label_map_path"] = str(
+            self._input_dir.resolve() / "label_map.pbtxt"
+        )
+        self._config["meta"] = str(self._input_dir.resolve() / "meta")
 
     @property
     def training_parameters(self):
@@ -62,7 +71,7 @@ class TFODDetector():
 
     @property
     def pretrained_model_cache_entry(self):
-        return self.__class__.__name__ + '-pretrained-model'
+        return self.__class__.__name__ + "-pretrained-model"
 
     @property
     def pretrained_model_url(self):
@@ -75,31 +84,39 @@ class TFODDetector():
     def cache_pretrained_model(self):
         """Download and cache pretrained model if not existed."""
         if utils.get_cache_entry(self.pretrained_model_cache_entry) is None:
-            logger.info('downloading and caching pretrained model from tensorflow website')
-            logger.info('url: {}'.format(self.pretrained_model_url))
+            logger.info(
+                "downloading and caching pretrained model from tensorflow website"
+            )
+            logger.info("url: {}".format(self.pretrained_model_url))
             utils.download_and_extract_url_tarball_to_cache_dir(
-                self.pretrained_model_url, self.pretrained_model_cache_entry)
+                self.pretrained_model_url, self.pretrained_model_cache_entry
+            )
 
     def get_pretrained_model_checkpoint(self):
         cache_entry_dir = utils.get_cache_entry(self.pretrained_model_cache_entry)
-        potential_pretained_model_files = list(cache_entry_dir.glob('**/model.ckpt*'))
+        potential_pretained_model_files = list(cache_entry_dir.glob("**/model.ckpt*"))
         if len(potential_pretained_model_files) == 0:
-            raise ValueError('Failed to find pretrained model in {}'.format(cache_entry_dir))
+            raise ValueError(
+                "Failed to find pretrained model in {}".format(cache_entry_dir)
+            )
         fine_tune_model_dir = potential_pretained_model_files[0].parent
-        return str(fine_tune_model_dir.resolve() / 'model.ckpt')
+        return str(fine_tune_model_dir.resolve() / "model.ckpt")
 
     def prepare_config(self):
         # num_classes are the number of classes to learn
-        with open(self._config['label_map_path'], 'r') as f:
+        with open(self._config["label_map_path"], "r") as f:
             content = f.read()
             labels = re.findall(r"\tname: '(\w+)'\n", content)
-            self._config['num_classes'] = len(labels)
+            self._config["num_classes"] = len(labels)
 
         # fine_tune_checkpoint should point to the path of the checkpoint from
         # which transfer learning is done
-        if ('fine_tune_checkpoint' not in self._config) or (
-                self._config['fine_tune_checkpoint'] is None):
-            self._config['fine_tune_checkpoint'] = self.get_pretrained_model_checkpoint()
+        if ("fine_tune_checkpoint" not in self._config) or (
+            self._config["fine_tune_checkpoint"] is None
+        ):
+            self._config[
+                "fine_tune_checkpoint"
+            ] = self.get_pretrained_model_checkpoint()
 
         # use default values for training parameters if not given
         for parameter, value in self.training_parameters.items():
@@ -107,9 +124,10 @@ class TFODDetector():
                 self._config[parameter] = value
 
     def prepare_config_pipeline_file(self):
-        pipeline_config = template.Template(
-            self.pipeline_config_template).render(**self._config)
-        with open(self._config['pipeline_config_path'], 'w') as f:
+        pipeline_config = template.Template(self.pipeline_config_template).render(
+            **self._config
+        )
+        with open(self._config["pipeline_config_path"], "w") as f:
             f.write(pipeline_config)
 
     def prepare(self):
@@ -123,14 +141,14 @@ class TFODDetector():
         Fail if missing files, or # of training/eval examples used is not positive
         """
         training_data_dir = pathlib.Path(FLAGS.pipeline_config_path).parent
-        assert (training_data_dir / 'meta').resolve().exists()
-        assert (training_data_dir / 'label_map.pbtxt').resolve().exists()
-        assert (training_data_dir / 'label_map.pbtxt').resolve().stat().st_size > 0
-        assert (training_data_dir / 'train.tfrecord').resolve().exists()
-        with open(training_data_dir / 'meta', 'r') as f:
+        assert (training_data_dir / "meta").resolve().exists()
+        assert (training_data_dir / "label_map.pbtxt").resolve().exists()
+        assert (training_data_dir / "label_map.pbtxt").resolve().stat().st_size > 0
+        assert (training_data_dir / "train.tfrecord").resolve().exists()
+        with open(training_data_dir / "meta", "r") as f:
             meta = json.load(f)
-            assert(meta["train_num"] > 0)
-            assert(meta["eval_num"] > 0)
+            assert meta["train_num"] > 0
+            assert meta["eval_num"] > 0
 
     def train(self):
         """Launch training using tensorflow object detection API."""
@@ -140,14 +158,19 @@ class TFODDetector():
         # TF uses absl to get command line flags
         FLAGS = flags.FLAGS
         # argv[0] is treated as program name, therefore not parsed
-        argv = ['',
-                '--pipeline_config_path={}'.format(self._config['pipeline_config_path']),
-                '--model_dir={}'.format(self._output_dir),
-                '--alsologtostderr']
-        logger.info('\n===========================================\n')
-        logger.info('\n\nlaunching training with the following parameters: \n{}\n\n'.format(
-            '\n'.join(argv)))
-        logger.info('\n===========================================\n')
+        argv = [
+            "",
+            "--pipeline_config_path={}".format(self._config["pipeline_config_path"]),
+            "--model_dir={}".format(self._output_dir),
+            "--alsologtostderr",
+        ]
+        logger.info("\n===========================================\n")
+        logger.info(
+            "\n\nlaunching training with the following parameters: \n{}\n\n".format(
+                "\n".join(argv)
+            )
+        )
+        logger.info("\n===========================================\n")
         FLAGS(argv)
         self._check_training_data_dir(FLAGS)
         continuous_train_and_eval_model.main([])
@@ -156,12 +179,14 @@ class TFODDetector():
         pass
 
     def _get_latest_model_ckpt_path(self):
-        candidates = [str(candidate.resolve()) for
-                      candidate in self._output_dir.glob('**/model.ckpt*')]
+        candidates = [
+            str(candidate.resolve())
+            for candidate in self._output_dir.glob("**/model.ckpt*")
+        ]
         max_step_model_path = candidates[0]
-        max_steps = re.findall(r'model.ckpt-(\d+)', max_step_model_path)[0]
+        max_steps = re.findall(r"model.ckpt-(\d+)", max_step_model_path)[0]
         for candidate_path in candidates:
-            trained_steps = re.findall(r'model.ckpt-(\d+)', candidate_path)[0]
+            trained_steps = re.findall(r"model.ckpt-(\d+)", candidate_path)[0]
             if trained_steps > max_steps:
                 max_step_model_path = candidate_path
         # the max_step_model_path now is a full of e.g.
@@ -186,41 +211,43 @@ class TFODDetector():
         can be done to directly call the export script as a python function.
         """
         with tempfile.TemporaryDirectory() as temp_dir:
-            cmd = ('python -m opentpod.object_detector.provider.tfod.wrappers.export_inference_graph ' +
-                   '--input_type=image_tensor --pipeline_config_path={} ' +
-                   '--trained_checkpoint_prefix={} ' +
-                   '--output_directory={} ' +
-                   '--alsologtostderr').format(
-                self._config['pipeline_config_path'],
+            cmd = (
+                "python -m opentpod.object_detector.provider.tfod.wrappers.export_inference_graph "
+                + "--input_type=image_tensor --pipeline_config_path={} "
+                + "--trained_checkpoint_prefix={} "
+                + "--output_directory={} "
+                + "--alsologtostderr"
+            ).format(
+                self._config["pipeline_config_path"],
                 self._get_latest_model_ckpt_path(),
-                temp_dir
+                temp_dir,
             )
-            logger.info('\n===========================================\n')
-            logger.info('\n\nExporting trained model with following command: \n\n{}'.format(cmd))
-            logger.info('\n===========================================\n')
-            process = subprocess.Popen(
-                cmd.split())
+            logger.info("\n===========================================\n")
+            logger.info(
+                "\n\nExporting trained model with following command: \n\n{}".format(cmd)
+            )
+            logger.info("\n===========================================\n")
+            process = subprocess.Popen(cmd.split())
             process.wait()
 
             # copy some useful training files to export as well
-            shutil.copy2(self._config['pipeline_config_path'], temp_dir)
-            shutil.copy2(self._config['label_map_path'], temp_dir)
-            shutil.copy2(self._config['meta'], temp_dir)
+            shutil.copy2(self._config["pipeline_config_path"], temp_dir)
+            shutil.copy2(self._config["label_map_path"], temp_dir)
+            shutil.copy2(self._config["meta"], temp_dir)
 
-            file_stem = str(pathlib.Path(output_file_path).parent
-                            / pathlib.Path(output_file_path).stem)
+            file_stem = str(
+                pathlib.Path(output_file_path).parent
+                / pathlib.Path(output_file_path).stem
+            )
             logger.debug(file_stem)
-            shutil.make_archive(
-                file_stem,
-                'zip',
-                temp_dir)
+            shutil.make_archive(file_stem, "zip", temp_dir)
 
     def _is_tensorboard_subprocess_running(self, pinfo_file_path):
         if pinfo_file_path.exists():
-            with open(pinfo_file_path, 'r') as f:
+            with open(pinfo_file_path, "r") as f:
                 subprocess_info = json.loads(f.read())
-                pid = subprocess_info['pid']
-                port = subprocess_info['port']
+                pid = subprocess_info["pid"]
+                port = subprocess_info["port"]
                 try:
                     p = psutil.Process(pid)
                     for connection in p.connections():
@@ -234,23 +261,29 @@ class TFODDetector():
                                 # the correct port try kill it
                                 p.kill()
                 except psutil.NoSuchProcess as e:
-                    logger.info('No tensorboard process serving directory: {}'.format(
-                        self._output_dir))
+                    logger.info(
+                        "No tensorboard process serving directory: {}".format(
+                            self._output_dir
+                        )
+                    )
         return False
 
     def _run_tensorboard_subprocess(self, pinfo_file_path):
         port = utils._find_open_port()
-        cmd = ('tensorboard ' +
-               '--logdir={} '.format(self._output_dir) +
-               '--host=localhost ' +
-               '--port={}'.format(port))
-        logger.info('\n===========================================\n')
-        logger.info('\n\tStarting Tensorboard with following command: \n\n{}'.format(cmd))
-        logger.info('\n===========================================\n')
-        process = subprocess.Popen(
-            cmd.split())
-        with open(pinfo_file_path, 'w') as f:
-            f.write(json.dumps({'pid': process.pid, 'port': port}))
+        cmd = (
+            "tensorboard "
+            + "--logdir={} ".format(self._output_dir)
+            + "--host=localhost "
+            + "--port={}".format(port)
+        )
+        logger.info("\n===========================================\n")
+        logger.info(
+            "\n\tStarting Tensorboard with following command: \n\n{}".format(cmd)
+        )
+        logger.info("\n===========================================\n")
+        process = subprocess.Popen(cmd.split())
+        with open(pinfo_file_path, "w") as f:
+            f.write(json.dumps({"pid": process.pid, "port": port}))
         time.sleep(5)
 
     def _run_tensorboard_subprocess_if_not_exist(self, pinfo_file_path):
@@ -280,19 +313,19 @@ class TFODDetector():
             Django HTTP response -- Returns a Django HTTP response for visualization.
         """
         if not self._output_dir.exists():
-            raise Http404('Model directory not exists. Has the model been trained?')
+            raise Http404("Model directory not exists. Has the model been trained?")
 
         # tensorboard needs index.html to load correctly
         if len(path) == 0:
-            path = 'index.html'
+            path = "index.html"
 
-        pinfo_file_path = (self._output_dir / 'tensorboard.pinfo').resolve()
+        pinfo_file_path = (self._output_dir / "tensorboard.pinfo").resolve()
         self._run_tensorboard_subprocess_if_not_exist(pinfo_file_path)
         if pinfo_file_path.exists():
-            with open(pinfo_file_path, 'r') as f:
+            with open(pinfo_file_path, "r") as f:
                 subprocess_info = json.loads(f.read())
-                port = subprocess_info['port']
-            remoteurl = 'http://localhost:{}/'.format(port) + path
+                port = subprocess_info["port"]
+            remoteurl = "http://localhost:{}/".format(port) + path
             return proxy_view(request, remoteurl)
         else:
             raise Http404
