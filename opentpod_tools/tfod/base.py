@@ -8,8 +8,8 @@ import shutil
 import subprocess
 import tempfile
 
+from string import Template
 from logzero import logger
-from mako import template
 
 from opentpod.object_detector.provider import utils
 
@@ -120,7 +120,7 @@ class TFODDetector:
                 self._config[parameter] = value
 
     def prepare_config_pipeline_file(self):
-        pipeline_config = template.Template(self.pipeline_config_template).render(
+        pipeline_config = Template(self.pipeline_config_template).substitute(
             **self._config
         )
         with open(self._config["pipeline_config_path"], "w") as f:

@@ -1,5 +1,4 @@
 from .base import TFODDetector
-from mako import template
 
 GENERIC_FASTER_RCNN_RESNET_TEMPLATE = """
 # Faster R-CNN with Resnet-101 (v1) configured for the Oxford-IIIT Pet Dataset.
