@@ -104,3 +104,7 @@ Usage
     # export to dataset for google auto ml object detection (not completely done yet)
     tpod-google-automl-od -b <bucket name on google cloud platform> -p unique
 
+    ...
+
+    # visualize progress with tensorboard (default port is 6006)
+    tensorboard --logdir=tfrecord --host=localhost --port=default
