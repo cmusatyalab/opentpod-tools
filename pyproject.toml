@@ -22,6 +22,7 @@ torch = "^1.7.0"
 torchvision = "^0.8.1"
 tensorflow = {version = "~1.15.4", optional = true }
 tensorflow-gpu = {version = "~1.15.4", optional = true }
+logzero = "^1.6.2"
 
 [tool.poetry.extras]
 tf = ["tensorflow"]

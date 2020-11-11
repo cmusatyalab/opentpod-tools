@@ -11,7 +11,7 @@ import tempfile
 from string import Template
 from logzero import logger
 
-from opentpod.object_detector.provider import utils
+from . import utils
 
 
 class TFODDetector:
@@ -83,7 +83,7 @@ class TFODDetector:
             logger.info(
                 "downloading and caching pretrained model from tensorflow website"
             )
-            logger.info("url: {}".format(self.pretrained_model_url))
+            logger.info("url: %s", self.pretrained_model_url)
             utils.download_and_extract_url_tarball_to_cache_dir(
                 self.pretrained_model_url, self.pretrained_model_cache_entry
             )
