@@ -1,6 +1,5 @@
 """Tensorflow Object Detection API provider.
 """
-import json
 import os
 import pathlib
 import re
@@ -9,6 +8,7 @@ import subprocess
 import tempfile
 
 from string import Template
+
 from logzero import logger
 
 from . import utils
@@ -17,7 +17,7 @@ from . import utils
 class TFODDetector:
     """Tensorflow Object Detection API
     See: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_locally.md
-    """
+    """  # noqa pylint: disable=line-too-long
 
     TRAINING_PARAMETERS = {}
 
@@ -47,19 +47,12 @@ class TFODDetector:
         self.cache_pretrained_model()
 
         # fill in on-disk file structure to config
-        self._config["pipeline_config_path"] = str(
-            self._input_dir.resolve() / "pipeline.config"
+        self._config["pipeline_config_path"] = os.fspath(
+            self._input_dir / "pipeline.config"
         )
-        self._config["train_input_path"] = str(
-            self._input_dir.resolve() / "train.tfrecord"
-        )
-        self._config["eval_input_path"] = str(
-            self._input_dir.resolve() / "eval.tfrecord"
-        )
-        self._config["label_map_path"] = str(
-            self._input_dir.resolve() / "label_map.pbtxt"
-        )
-        self._config["meta"] = str(self._input_dir.resolve() / "meta")
+        self._config["train_input_path"] = os.fspath(self._input_dir / "train.tfrecord")
+        self._config["eval_input_path"] = os.fspath(self._input_dir / "eval.tfrecord")
+        self._config["label_map_path"] = os.fspath(self._input_dir / "label_map.pbtxt")
 
     @property
     def training_parameters(self):
@@ -96,7 +89,7 @@ class TFODDetector:
                 "Failed to find pretrained model in {}".format(cache_entry_dir)
             )
         fine_tune_model_dir = potential_pretained_model_files[0].parent
-        return str(fine_tune_model_dir.resolve() / "model.ckpt")
+        return os.fspath(fine_tune_model_dir / "model.ckpt")
 
     def prepare_config(self):
         # num_classes are the number of classes to learn
@@ -137,14 +130,10 @@ class TFODDetector:
         Fail if missing files, or # of training/eval examples used is not positive
         """
         training_data_dir = pathlib.Path(FLAGS.pipeline_config_path).parent
-        assert (training_data_dir / "meta").resolve().exists()
-        assert (training_data_dir / "label_map.pbtxt").resolve().exists()
-        assert (training_data_dir / "label_map.pbtxt").resolve().stat().st_size > 0
-        assert (training_data_dir / "train.tfrecord").resolve().exists()
-        with open(training_data_dir / "meta", "r") as f:
-            meta = json.load(f)
-            assert meta["train_num"] > 0
-            assert meta["eval_num"] > 0
+        assert (training_data_dir / "label_map.pbtxt").exists()
+        assert (training_data_dir / "label_map.pbtxt").stat().st_size > 0
+        assert (training_data_dir / "train.tfrecord").exists()
+        assert (training_data_dir / "eval.tfrecord").exists()
 
     def train(self):
         """Launch training using tensorflow object detection API."""
@@ -160,13 +149,18 @@ class TFODDetector:
             "--model_dir={}".format(self._output_dir),
             "--alsologtostderr",
         ]
-        logger.info("\n===========================================\n")
         logger.info(
-            "\n\nlaunching training with the following parameters: \n{}\n\n".format(
-                "\n".join(argv)
-            )
+            """
+===========================================
+
+launching training with the following parameters:
+
+    %s
+
+===========================================
+""",
+            "\n    ".join(argv),
         )
-        logger.info("\n===========================================\n")
         FLAGS(argv)
         self._check_training_data_dir(FLAGS)
         continuous_train_and_eval_model.main([])
@@ -176,7 +170,7 @@ class TFODDetector:
 
     def _get_latest_model_ckpt_path(self):
         candidates = [
-            str(candidate.resolve())
+            os.fspath(candidate)
             for candidate in self._output_dir.glob("**/model.ckpt*")
         ]
         max_step_model_path = candidates[0]
@@ -238,9 +232,8 @@ Exporting trained model with following command:
             # copy some useful training files to export as well
             shutil.copy2(self._config["pipeline_config_path"], temp_dir)
             shutil.copy2(self._config["label_map_path"], temp_dir)
-            shutil.copy2(self._config["meta"], temp_dir)
 
-            file_stem = str(
+            file_stem = os.fspath(
                 pathlib.Path(output_file_path).parent
                 / pathlib.Path(output_file_path).stem
             )
