@@ -208,21 +208,30 @@ class TFODDetector:
         """
         with tempfile.TemporaryDirectory() as temp_dir:
             cmd = (
-                "python -m opentpod.object_detector.provider.tfod.wrappers.export_inference_graph "
-                + "--input_type=image_tensor --pipeline_config_path={} "
-                + "--trained_checkpoint_prefix={} "
-                + "--output_directory={} "
-                + "--alsologtostderr"
+                "python"
+                " -m opentpod_tools.tfod.wrappers.export_inference_graph"
+                " --input_type=image_tensor"
+                " --pipeline_config_path={}"
+                " --trained_checkpoint_prefix={}"
+                " --output_directory={}"
+                " --alsologtostderr"
             ).format(
                 self._config["pipeline_config_path"],
                 self._get_latest_model_ckpt_path(),
                 temp_dir,
             )
-            logger.info("\n===========================================\n")
             logger.info(
-                "\n\nExporting trained model with following command: \n\n{}".format(cmd)
+                """
+===========================================
+
+Exporting trained model with following command:
+
+%s
+
+===========================================
+""",
+                cmd,
             )
-            logger.info("\n===========================================\n")
             process = subprocess.Popen(cmd.split())
             process.wait()
 
