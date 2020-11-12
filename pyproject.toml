@@ -4,17 +4,26 @@ version = "0.1.0"
 description = "Command line tools integrating OpenTPOD functionality."
 authors = [
     "Jan Harkes <jaharkes@cs.cmu.edu>",
+    "Junjue Wang <junjuew@cs.cmu.edu>"
 ]
 license = "Apache-2.0"
+readme = "README.md"
 repository = "https://github.com/cmusatyalab/opentpod-tools/"
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
 ConfigArgParse = "^1.2.3"
 datumaro = [
-    {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.3", extras = ["tf"], markers = "extra != 'tf-gpu'"},
-    {git = "https://github.com/openvinotoolkit/datumaro", rev = "v0.1.3", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
+    {git = "https://github.com/openvinotoolkit/datumaro.git", rev = "v0.1.3", extras = ["tf"], markers = "extra != 'tf-gpu'"},
+    {git = "https://github.com/openvinotoolkit/datumaro.git", rev = "v0.1.3", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
 ]
+logzero = "^1.6.2"
 requests = "^2.24.0"
 tqdm = "^4.50.2"
 imagehash = "^4.1.0"
@@ -22,7 +31,10 @@ torch = "^1.7.0"
 torchvision = "^0.8.1"
 tensorflow = {version = "~1.15.4", optional = true }
 tensorflow-gpu = {version = "~1.15.4", optional = true }
-logzero = "^1.6.2"
+tf-object-detection = [
+    {path = "../tf-object-detection/dist/tf-object-detection-0.1.0.tar.gz", extras = ["tf"], markers = "extra != 'tf-gpu'"},
+    {path = "../tf-object-detection/dist/tf-object-detection-0.1.0.tar.gz", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
+]
 
 [tool.poetry.extras]
 tf = ["tensorflow"]
