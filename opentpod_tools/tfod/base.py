@@ -165,9 +165,6 @@ launching training with the following parameters:
         self._check_training_data_dir(FLAGS)
         continuous_train_and_eval_model.main([])
 
-    def run(self):
-        pass
-
     def _get_latest_model_ckpt_path(self):
         candidates = [
             os.fspath(candidate)
