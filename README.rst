@@ -76,8 +76,15 @@ Usage
     # merge datasets
     tpod-merge -o merged <dataset0> .. <datasetN>
 
+    # remove duplication
+    tpod-unique -l 1 -o unique -p merged [-t 10 -r 0.7]
+    -l --level: 1 continuous checking, always check the last unique image
+                2 random checking, generate random set of unique image list with [-r/--ratio]
+                3 complete checking, check the complete unique image list
+    -t --threshold: the difference between current image and unique image(s), default = 10
+
     # split into training and testing subsets
-    datum project transform -p merged -o split -t random_split -- -s train:0.9 -s eval:0.1
+    datum project transform -p unique -o split -t random_split -- -s train:0.9 -s eval:0.1
 
     # export to tfrecord format
     datum project export -p split -f tf_detection_api -o tfrecord
