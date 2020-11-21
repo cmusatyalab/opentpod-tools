@@ -17,6 +17,7 @@ datumaro = [
 ]
 requests = "^2.24.0"
 tqdm = "^4.50.2"
+imagehash = "^4.1.0"
 tensorflow = {version = "~1.15.4", optional = true }
 tensorflow-gpu = {version = "~1.15.4", optional = true }
 
@@ -38,6 +39,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 tpod-download = "opentpod_tools.download:main"
 tpod-merge = "opentpod_tools.merge:main"
+tpod-unique = "opentpod_tools.removedup:main"
 
 [tool.poetry.urls]
 issues = "https://github.com/cmusatyalab/opentpod-tools/issues"
