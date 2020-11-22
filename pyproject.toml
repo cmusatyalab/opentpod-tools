@@ -40,6 +40,8 @@ build-backend = "poetry.core.masonry.api"
 tpod-download = "opentpod_tools.download:main"
 tpod-merge = "opentpod_tools.merge:main"
 tpod-unique = "opentpod_tools.removedup:main"
+tpod-class = "opentpod_tools.classification:main"
+tpod-google-automl-od = "opentpod_tools.google_automl_od:main"
 
 [tool.poetry.urls]
 issues = "https://github.com/cmusatyalab/opentpod-tools/issues"
