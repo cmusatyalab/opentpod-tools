@@ -89,3 +89,10 @@ Usage
     # export to tfrecord format
     datum project export -p split -f tf_detection_api -o tfrecord
 
+    # export to dataset for pytorch classification
+    tpod-class [-s] -p split -o classification
+    -s --split: the flag used to check whether the input directory has been splitted into training and testing subsets
+
+    # export to dataset for google auto ml object detection (not completely done yet)
+    tpod-google-automl-od -b <bucket name on google cloud platform> -p unique
+
