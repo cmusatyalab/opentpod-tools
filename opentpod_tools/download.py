@@ -111,8 +111,7 @@ def _cvat_export_dataset_cli(
                 cvat_params, task_id, output_zip, dataset_format, progress=pbar
             )
 
-        #except requests.exceptions.HTTPError as exc:
-        except Exception as exc:
+        except requests.exceptions.RequestException as exc:
             tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
             return
 
