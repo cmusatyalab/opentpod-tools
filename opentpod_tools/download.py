@@ -111,8 +111,9 @@ def _cvat_export_dataset_cli(
                 cvat_params, task_id, output_zip, dataset_format, progress=pbar
             )
 
-        except requests.exceptions.HTTPError as exc:
+        except requests.exceptions.RequestException as exc:
             tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
+            return
 
         if unzip:
             tqdm.write(f"Unpacking {output_zip}")
@@ -154,6 +155,7 @@ def main():
             pool.submit(
                 export_dataset, task, position=position, unzip=not args.no_unzip
             )
+    print()
 
 
 if __name__ == "__main__":
