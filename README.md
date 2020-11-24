@@ -87,12 +87,12 @@ Train a tensorflow object detector.
 
 ```sh
     # export to tfrecord format
-    $ datum project export -p split -f tf_detection_api -o tfrecord
+    $ datum project export -p split -f tf_detection_api -o tfrecord -- --save-images
 
-    ...
+    $ tpod-tfod-training --model faster_rcnn_resnet101 --input-dir tfrecord --output-dir new_model
 
     # visualize progress with tensorboard (default port is 6006)
-    $ tensorboard --logdir=tfrecord --host=localhost --port=default
+    $ tensorboard --logdir=new_model --host=localhost --port=default
 ```
 
 Train Pytorch classification model.

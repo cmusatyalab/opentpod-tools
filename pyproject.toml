@@ -59,6 +59,7 @@ tpod-class = "opentpod_tools.classification:main"
 tpod-google-automl-od = "opentpod_tools.google_automl_od:main"
 tpod-pytorch-class = "opentpod_tools.pytorch_classification:main"
 tpod-pytorch-class-test = "opentpod_tools.pytorch_class_result:main"
+tpod-tfod-training = "opentpod_tools.tfod_training:main"
 
 [tool.poetry.urls]
 issues = "https://github.com/cmusatyalab/opentpod-tools/issues"
