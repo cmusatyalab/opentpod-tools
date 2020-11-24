@@ -95,7 +95,7 @@ class TFODDetector:
         # num_classes are the number of classes to learn
         with open(self._config["label_map_path"], "r") as f:
             content = f.read()
-            labels = re.findall(r"\tname: '(\w+)'\n", content)
+            labels = re.findall(r"\tname: '(.+?)'\n", content)
             self._config["num_classes"] = len(labels)
 
         # fine_tune_checkpoint should point to the path of the checkpoint from
