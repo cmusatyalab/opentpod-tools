@@ -61,6 +61,9 @@ poetry.lock file.
 
 ## Usage
 
+The following assume that `opentpod-tools` has been installed globally, or you
+are running it from within a virtualenv (see `poetry run`/`poetry shell`).
+
 Download, merge and cleanup datasets.
 
 ```sh
@@ -81,6 +84,16 @@ Download, merge and cleanup datasets.
 
     # split into training and testing subsets
     $ datum project transform -p unique -o split -t random_split -- -s train:0.9 -s eval:0.1
+```
+
+Explore the dataset.
+
+```sh
+    # high level information (# image in trainingset and evaluation set)
+    $ datum project info -p split
+
+    # detailed statistics (distribution of labels, area of labeled features, etc.)
+    $ datum project stats -p split
 ```
 
 Train a tensorflow object detector.
