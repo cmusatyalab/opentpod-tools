@@ -32,8 +32,8 @@ torchvision = "^0.8.1"
 tensorflow = {version = "~1.15.4", optional = true }
 tensorflow-gpu = {version = "~1.15.4", optional = true }
 tf-object-detection = [
-    {path = "../tf-object-detection/dist/tf-object-detection-0.1.0.tar.gz", extras = ["tf"], markers = "extra != 'tf-gpu'"},
-    {path = "../tf-object-detection/dist/tf-object-detection-0.1.0.tar.gz", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
+    {url = "http://coda.cs.cmu.edu/~jaharkes/tf-object-detection-0.1.0.tar.gz", extras = ["tf"], markers = "extra != 'tf-gpu'"},
+    {url = "http://coda.cs.cmu.edu/~jaharkes/tf-object-detection-0.1.0.tar.gz", extras = ["tf-gpu"], markers = "extra == 'tf-gpu'"},
 ]
 
 [tool.poetry.extras]
