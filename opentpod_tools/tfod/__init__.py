@@ -1,2 +1,2 @@
-from .tfod_faster_rcnn import TFODFasterRCNNResNet101, TFODFasterRCNNResNet50
-from .tfod_ssd import TFODSSDMobileNetV2
+from .utils import REGISTRY
+from . import tfod_faster_rcnn, tfod_ssd

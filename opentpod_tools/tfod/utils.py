@@ -10,6 +10,9 @@ from logzero import logger
 from tqdm import tqdm
 
 
+# Registry to track available tensorflow detectors
+REGISTRY = {}
+
 XDG_CACHE_DIR = (
     Path(os.getenv("XDG_CACHE_HOME", os.path.expanduser("~/.cache"))) / "opentpod-tools"
 )

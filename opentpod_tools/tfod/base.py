@@ -11,13 +11,19 @@ from string import Template
 
 from logzero import logger
 
-from . import utils
+from opentpod_tools.tfod import utils
 
 
 class TFODDetector:
     """Tensorflow Object Detection API
     See: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_locally.md
     """  # noqa pylint: disable=line-too-long
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        model_name = cls.__name__.lower()
+        if not model_name.startswith("tfod"):
+            utils.REGISTRY[model_name] = cls
 
     TRAINING_PARAMETERS = {}
 

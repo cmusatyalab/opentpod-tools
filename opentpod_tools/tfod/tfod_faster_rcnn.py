@@ -158,26 +158,33 @@ class TFODFasterRCNNResNetGeneric(TFODDetector):
         return GENERIC_FASTER_RCNN_RESNET_TEMPLATE
 
 
-class TFODFasterRCNNResNet101(TFODFasterRCNNResNetGeneric):
+# pylint: disable=invalid-name
+class Faster_RCNN_ResNet101(TFODFasterRCNNResNetGeneric):
     def __init__(self, config):
         super().__init__(config)
 
     @property
     def pretrained_model_url(self):
-        return "http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet101_coco_2018_01_28.tar.gz"
+        return (
+            "http://download.tensorflow.org/models/object_detection/"
+            "faster_rcnn_resnet101_coco_2018_01_28.tar.gz"
+        )
 
     @property
     def feature_extractor_type(self):
         return "faster_rcnn_resnet101"
 
 
-class TFODFasterRCNNResNet50(TFODFasterRCNNResNetGeneric):
+class Faster_RCNN_ResNet50(TFODFasterRCNNResNetGeneric):
     def __init__(self, config):
         super().__init__(config)
 
     @property
     def pretrained_model_url(self):
-        return "http://download.tensorflow.org/models/object_detection/faster_rcnn_resnet50_coco_2018_01_28.tar.gz"
+        return (
+            "http://download.tensorflow.org/models/object_detection/"
+            "faster_rcnn_resnet50_coco_2018_01_28.tar.gz"
+        )
 
     @property
     def feature_extractor_type(self):
