@@ -11,7 +11,7 @@ from string import Template
 
 from logzero import logger
 
-from opentpod_tools.tfod import utils
+from . import utils
 
 
 class TFODDetector:
@@ -54,7 +54,7 @@ class TFODDetector:
 
         # fill in on-disk file structure to config
         self._config["pipeline_config_path"] = os.fspath(
-            self._input_dir / "pipeline.config"
+            self._output_dir / "pipeline.config"
         )
         self._config["train_input_path"] = os.fspath(self._input_dir / "train.tfrecord")
         self._config["eval_input_path"] = os.fspath(self._input_dir / "eval.tfrecord")
@@ -106,9 +106,7 @@ class TFODDetector:
 
         # fine_tune_checkpoint should point to the path of the checkpoint from
         # which transfer learning is done
-        if ("fine_tune_checkpoint" not in self._config) or (
-            self._config["fine_tune_checkpoint"] is None
-        ):
+        if self._config.get("fine_tune_checkpoint", None) is None:
             self._config[
                 "fine_tune_checkpoint"
             ] = self.get_pretrained_model_checkpoint()
@@ -122,6 +120,7 @@ class TFODDetector:
         pipeline_config = Template(self.pipeline_config_template).substitute(
             **self._config
         )
+        os.makedirs(self._config["output_dir"])
         with open(self._config["pipeline_config_path"], "w") as f:
             f.write(pipeline_config)
 
