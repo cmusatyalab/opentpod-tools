@@ -93,6 +93,14 @@ Usage
     tpod-class [-s] -p split -o classification
     -s --split: the flag used to check whether the input directory has been splitted into training and testing subsets
 
+    # train pytorch classification model (NOTE: please split the datasets to train and val first, and use tpod-class -s to obtain the required dataset)
+    tpod-pytorch-class -p classification -o model [-m <model name>] [-e <echop number>]
+    -m --model: pytorch classification model name, options: mobilenet, resnet50, resnet18 (not case sentative), default = mobilenet
+    -e --epoch: default = 25
+
+    # obtain classified result with input image
+    tpod-pytorch-class-test -i <image path> -p model
+
     # export to dataset for google auto ml object detection (not completely done yet)
     tpod-google-automl-od -b <bucket name on google cloud platform> -p unique
 
