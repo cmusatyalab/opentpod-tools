@@ -7,8 +7,8 @@ The basis of this code originates from the Tool for Painless Object Detection
 (OpenTPOD) developed by Junjue Wang.
 
 We also pull in [datumaro](https://github.com/openvinotoolkit/datumaro) which
-is the backend used by CVAT to handle reading, writing, conversion, and merging
-for various dataset formats.
+is the backend used by CVAT which handles reading, writing, conversion, and
+merging of various dataset formats.
 
 
 ## Configuration file
@@ -50,7 +50,9 @@ virtualenv environment with `poetry shell` and work from there.
 
 Whenever you update your checked out source tree, it is useful to re-run
 poetry install to pull in any updated dependencies as described in the new
-poetry.lock file.
+`poetry.lock` file. If there is a merge conflict on the `poetry.lock` file
+you can remove it and re-run `poetry install` to create a new conflict-free
+version.
 
 ```sh
     cd opentpod-tools
@@ -102,6 +104,7 @@ Train a tensorflow object detector.
     # export to tfrecord format
     $ datum project export -p split -f tf_detection_api -o tfrecord -- --save-images
 
+    # train model and optionally freeze as 'new_model.zip'
     $ tpod-tfod-training --model faster_rcnn_resnet101 --input-dir tfrecord --output-dir new_model [--freeze]
 
     # visualize progress with tensorboard (default port is 6006)
@@ -116,15 +119,18 @@ Train Pytorch classification model.
 ```sh
     # export to dataset for pytorch classification
     $ tpod-class [-s] -p split -o classification
-    # -s --split: the flag used to check whether the input directory has been splitted into training and testing subsets
+    # -s --split: the flag used to check whether the input directory has been
+    #    splitted into training and testing subsets
 
-    # train pytorch classification model (NOTE: please split the datasets to train and val first, and use tpod-class -s to obtain the required dataset)
-    tpod-pytorch-class -p classification -o model [-m <model name>] [-e <echop number>]
-    -m --model: pytorch classification model name, options: mobilenet, resnet50, resnet18 (not case sentative), default = mobilenet
-    -e --epoch: default = 25
+    # train pytorch classification model (NOTE: please split the datasets to
+    # train and val first, and use tpod-class -s to obtain the required dataset)
+    $ tpod-pytorch-class -p classification -o model [-m <model name>] [-e <echop number>]
+    # -m --model: pytorch classification model name
+    #     options: mobilenet, resnet50, resnet18 (not case sentative), default = mobilenet
+    # -e --epoch: default = 25
 
     # obtain classified result with input image
-    tpod-pytorch-class-test -i <image path> -p model
+    $ tpod-pytorch-class-test -i <image path> -p model
 ```
 
 Export for Google AutoML object detection training.
