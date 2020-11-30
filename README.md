@@ -102,10 +102,13 @@ Train a tensorflow object detector.
     # export to tfrecord format
     $ datum project export -p split -f tf_detection_api -o tfrecord -- --save-images
 
-    $ tpod-tfod-training --model faster_rcnn_resnet101 --input-dir tfrecord --output-dir new_model
+    $ tpod-tfod-training --model faster_rcnn_resnet101 --input-dir tfrecord --output-dir new_model [--freeze]
 
     # visualize progress with tensorboard (default port is 6006)
     $ tensorboard --logdir=new_model --host=localhost --port=default
+
+    # freeze model if not already frozen after training
+    $ tpod-tfod-freeze --model-dir new_model --output new_model.zip
 ```
 
 Train Pytorch classification model.

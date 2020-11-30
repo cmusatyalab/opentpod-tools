@@ -13,6 +13,7 @@ Download models and train a detector.
 import argparse
 
 from opentpod_tools.tfod import REGISTRY
+from opentpod_tools.tfod.freezer import freeze
 
 
 def main():
@@ -28,6 +29,7 @@ def main():
     parser.add_argument("--num-steps", type=int)
     parser.add_argument("--batch-size", type=int)
     parser.add_argument("--fine-tune-checkpoint", help="Pretrained model to start from")
+    parser.add_argument("--freeze", action="store_true")
     args = parser.parse_args()
 
     # collect arguments, drop unspecified ones
@@ -36,6 +38,10 @@ def main():
     instance = REGISTRY[args.model](config)
     instance.prepare()
     instance.train()
+
+    if args.freeze:
+        # freeze model to '<output_dir>.zip'
+        freeze(args.output_dir, args.output_dir + ".zip")
 
 
 if __name__ == "__main__":

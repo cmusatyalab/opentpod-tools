@@ -1,3 +1,11 @@
+#
+#  Copyright (c) 2019-2020 Carnegie Mellon University
+#  All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+"""Tensorflow Object Detection -- SSD MobileNet V2 detector"""
+
 from .base import TFODDetector
 
 TEMPLATE = """
@@ -198,9 +206,6 @@ eval_input_reader: {
 # pylint: disable=invalid-name
 class SSD_MobileNet_V2(TFODDetector):
     TRAINING_PARAMETERS = {"batch_size": 2, "num_steps": 20000}
-
-    def __init__(self, config):
-        super().__init__(config)
 
     @property
     def pretrained_model_url(self):

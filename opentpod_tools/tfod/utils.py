@@ -1,5 +1,10 @@
-"""Uitlity functions for object detection providers.
-"""
+#
+#  Copyright (c) 2019-2020 Carnegie Mellon University
+#  All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+"""Utility functions for object detection providers"""
 
 import os
 import shutil

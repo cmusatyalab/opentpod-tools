@@ -1,3 +1,11 @@
+#
+#  Copyright (c) 2019-2020 Carnegie Mellon University
+#  All rights reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+"""Tensorflow Object Detection - FasterRCNN detectors"""
+
 from .base import TFODDetector
 
 GENERIC_FASTER_RCNN_RESNET_TEMPLATE = """
