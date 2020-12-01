@@ -24,6 +24,21 @@ common settings such as the CVAT installation base url, username, and password.
 ```
 
 
+## Installation
+
+```sh
+    # set up a virtualenv with a newer pip
+    $ python3 -m venv venv
+    $ venv/bin/pip install --upgrade pip
+
+    # install opentpod-tools with either tensorflow [tf] or tensorflow-gpu [tf-gpu]
+    $ venv/bin/pip install git+https://github.com/cmusatyalab/opentpod-tools.git#egg=opentpod-tools[tf]
+```
+
+If it looks like pip is downloading lots of packages trying to resolve
+dependencies you probably forgot to specify the [tf]/[tf-gpu] option.
+
+
 ## Building from source
 
 This is my first attempt at using [Poetry](https://python-poetry.org) to manage
@@ -126,7 +141,7 @@ Train Pytorch classification model.
     # train and val first, and use tpod-class -s to obtain the required dataset)
     $ tpod-pytorch-class -p classification -o model [-m <model name>] [-e <echop number>]
     # -m --model: pytorch classification model name
-    #     options: mobilenet, resnet50, resnet18 (not case sentative), default = mobilenet
+    #     options: mobilenet, resnet50, resnet18 (not case sensitive), default = mobilenet
     # -e --epoch: default = 25
 
     # obtain classified result with input image
