@@ -30,13 +30,8 @@ common settings such as the CVAT installation base url, username, and password.
     # set up a virtualenv with a newer pip
     $ python3 -m venv venv
     $ venv/bin/pip install --upgrade pip
-
-    # install opentpod-tools with either tensorflow [tf] or tensorflow-gpu [tf-gpu]
-    $ venv/bin/pip install git+https://github.com/cmusatyalab/opentpod-tools.git#egg=opentpod-tools[tf]
+    $ venv/bin/pip install git+https://github.com/cmusatyalab/opentpod-tools.git
 ```
-
-If it looks like pip is downloading lots of packages trying to resolve
-dependencies you probably forgot to specify the [tf]/[tf-gpu] option.
 
 
 ## Building from source
@@ -53,10 +48,7 @@ It should be possible to locally build this package as follows,
     # I used (the not recommended way): pip3 install --user poetry
     $ git clone https://github.com/cmusatyalab/opentpod-tools.git
     $ cd opentpod-tools
-
-    # run either of the following
-    $ poetry install              # this installs tensorflow dependencies
-    $ poetry install -E tf-gpu    # this will install tensorflow-gpu
+    $ poetry install
 ```
 
 This will create a virtualenv with all the dependencies and installs
@@ -72,7 +64,7 @@ version.
 ```sh
     cd opentpod-tools
     git pull
-    poetry install [-E tf-gpu]
+    poetry install
 ```
 
 
