@@ -143,7 +143,7 @@ class TFODDetector:
 
         Fail if missing files, or # of training/eval examples used is not positive
         """
-        training_data_dir = pathlib.Path(FLAGS.pipeline_config_path).parent
+        training_data_dir = self._input_dir
         assert (training_data_dir / "label_map.pbtxt").exists()
         assert (training_data_dir / "label_map.pbtxt").stat().st_size > 0
         assert (training_data_dir / "train.tfrecord").exists()
