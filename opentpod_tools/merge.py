@@ -173,6 +173,11 @@ def main():
         help="Leave temporary datasets around for debugging",
     )
     parser.add_argument(
+        "--no-filter-empty",
+        action="store_true",
+        help="Do not remove frames that have no annotations",
+    )
+    parser.add_argument(
         "-o",
         "--output",
         default="merged",
@@ -195,10 +200,13 @@ def main():
                 cleanup_paths.append(project_dir)
                 imported = True
 
-            # remove frames with no annotations
-            filtered = filter_empty_frames(dataset, project_dir)
-            if filtered is None:
-                continue
+            if not args.no_filter_empty:
+                # remove frames with no annotations
+                filtered = filter_empty_frames(dataset, project_dir)
+                if filtered is None:
+                    continue
+            else:
+                filtered = project_dir
 
             # reindex to avoid colliding item ids
             reindexed, items = reindex(dataset, filtered, start_index=start_index)
