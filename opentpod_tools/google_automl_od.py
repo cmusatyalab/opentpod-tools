@@ -3,15 +3,17 @@ import json
 import os
 import shutil
 from PIL import Image
+import time
+from .google_cloud_helper import upload_blob, create_dataset, import_data, train_model
 
-def prepareOutput(outputpath='result'):
+def prepareOutput(outputpath):
 	if os.path.exists(outputpath):
 		shutil.rmtree(outputpath)
 	os.mkdir(outputpath)
-	datapath = os.path.join(outputpath, 'data')
-	os.mkdir(datapath)
+	# datapath = os.path.join(outputpath, 'data')
+	# os.mkdir(datapath)
 
-def obtainData(jsonpath, outputpath, busketpath):
+def obtainData(jsonpath, outputpath, bucketpath):
 	dic = json.loads(open(jsonpath).read())
 	item2label = {}
 	counter = 0
@@ -28,9 +30,10 @@ def obtainData(jsonpath, outputpath, busketpath):
 		uniqueid += 1
 		height = i['image']['size'][0]
 		width = i['image']['size'][1]
-		dst = os.path.join(outputpath, 'data', store_name)
-		shutil.copyfile(imagepath, dst)
-		prefix = 'UNASSIGNED' + ',' + os.path.join(busketpath, 'data', store_name)
+		upload_blob(bucketpath, imagepath, store_name)
+		# dst = os.path.join(outputpath, 'data', store_name)
+		# shutil.copyfile(imagepath, dst)
+		prefix = 'UNASSIGNED' + ',' + os.path.join("gs://" + bucketpath, store_name)
 		for j in i['annotations']:
 			lid = j['label_id']
 			itemname = item2label[lid]
@@ -44,16 +47,21 @@ def obtainData(jsonpath, outputpath, busketpath):
 	outputcsv = open(os.path.join(outputpath, 'info.csv'), 'w+')
 	outputcsv.write(info)
 	outputcsv.close()
+	upload_blob(bucketpath, os.path.join(outputpath, 'info.csv'), 'info.csv')
+	shutil.rmtree(outputpath)
+	return 'gs://' + os.path.join(bucketpath, 'info.csv')
 
 def main():
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-b", "--busket", required=True, help="Google cloud busket name (please include gs://)")
+	parser.add_argument("-b", "--bucket", required=True, help="Google cloud bucket name (please DO NOT include gs://)")
 	parser.add_argument("-p", "--path", required=True, help="Input dataset path")
 	args = parser.parse_args()
-	prepareOutput()
+	temppath = 'temp' + str(int(time.time()))
+	prepareOutput(temppath)
 	jsonpath = os.path.join(args.path, 'dataset', 'annotations', 'default.json')
-	obtainData(jsonpath, 'result', args.busket)
-
+	csvpath = obtainData(jsonpath, temppath, args.bucket)
+	print('CSV file path: ')
+	print(csvpath)
 
 if __name__ == "__main__":
     main()

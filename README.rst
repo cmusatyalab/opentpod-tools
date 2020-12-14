@@ -101,6 +101,20 @@ Usage
     # obtain classified result with input image
     tpod-pytorch-class-test -i <image path> -p model
 
-    # export to dataset for google auto ml object detection (not completely done yet)
-    tpod-google-automl-od -b <bucket name on google cloud platform> -p unique
+    # set google credential path
+    refer to https://cloud.google.com/vision/automl/docs/client-libraries
 
+    # generate dataset for google auto ml object detection and upload to google cloud storage
+    tpod-google-automl-od -b <bucket name on google cloud platform (Exclude gs://)> -p unique
+    (the result csv file path will be printed which is used for training)
+
+    # import dataset and start to train object detection model on google automl 
+    tpod-google-automl-od-train -p <project id> -n <model name> -c <csv file path>
+
+    # generate dataset for google auto ml classification and upload to google cloud storage
+    tpod-google-automl-od -b <bucket name on google cloud platform (Exclude gs://)> -p classification
+    NOTE: the classification should not be split (i.e. please DO NOT run split before obtaining this dataset)
+    (the result csv file path will be printed which is used for training)
+
+    # import dataset and start to train classification model on google automl 
+    tpod-google-automl-class-train -p <project id> -n <model name> -c <csv file path>
