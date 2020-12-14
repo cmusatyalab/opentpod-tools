@@ -67,6 +67,19 @@ version.
     poetry install
 ```
 
+Note: Ubuntu 20.04 only has python3.8 by default which we currently don't
+support because some of our dependencies don't support it yet. Tensorflow
+(1.85) is not installable with python-3.8 and torch/torchvision have a
+dependency (dataclasses) that locks us at python-3.6.
+
+As a workaround you can install the python-3.6 release from the deadsnakes PPA.
+
+```sh
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt-get update
+    sudo apt-get install python3.6 python3.6-dev
+```
+
 
 ## Usage
 
