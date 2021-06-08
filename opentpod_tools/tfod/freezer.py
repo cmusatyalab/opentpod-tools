@@ -8,11 +8,11 @@
 
 import argparse
 import os
-from pathlib import Path
 import re
 import shutil
 import subprocess
 import tempfile
+from pathlib import Path
 
 from logzero import logger
 

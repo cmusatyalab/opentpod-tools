@@ -8,20 +8,21 @@
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#sphx-glr-beginner-transfer-learning-tutorial-py
 
-from __future__ import print_function, division
+from __future__ import division, print_function
 
+import copy
+import os
+import time
+
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.optim import lr_scheduler
-import numpy as np
 import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
-import time
-import os
-import copy
 from PIL import Image
+from torch.optim import lr_scheduler
+from torchvision import datasets, models, transforms
 
 # from logzero import logger
 

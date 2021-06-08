@@ -14,7 +14,6 @@ import requests
 from logzero import logger
 from tqdm import tqdm
 
-
 # Registry to track available tensorflow detectors
 REGISTRY = {}
 

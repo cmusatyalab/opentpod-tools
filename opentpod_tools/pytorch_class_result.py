@@ -11,13 +11,14 @@
 #
 # Modified: Zhen Luan zluan@andrew.cmu.edu
 
-import torch
-import numpy as np
-import torchvision
-from torchvision import datasets, models, transforms
-from PIL import Image
-import os
 import argparse
+import os
+
+import numpy as np
+import torch
+import torchvision
+from PIL import Image
+from torchvision import datasets, models, transforms
 
 
 def getItemInfo(infopath):

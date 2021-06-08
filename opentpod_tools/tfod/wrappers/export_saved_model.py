@@ -27,18 +27,18 @@ based on https://github.com/tensorflow/models/issues/1988.
 """
 import os
 import tempfile
+
 import tensorflow as tf
-from tensorflow.core.protobuf import saver_pb2
+from object_detection.builders import graph_rewriter_builder, model_builder
 from object_detection.core import standard_fields as fields
-from object_detection.builders import graph_rewriter_builder
-from object_detection.builders import model_builder
-from object_detection.utils import config_util
 from object_detection.exporter import (
     build_detection_graph,
     profile_inference_graph,
     replace_variable_values_with_moving_averages,
     write_graph_and_checkpoint,
 )
+from object_detection.utils import config_util
+from tensorflow.core.protobuf import saver_pb2
 
 
 def write_saved_model(saved_model_path, trained_checkpoint_prefix, inputs, outputs):

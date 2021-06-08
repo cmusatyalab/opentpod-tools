@@ -10,15 +10,15 @@
 """Remove similar frames based on a perceptual hash metric
 """
 
+import argparse
 import json
 import os
-import argparse
 import random
 import shutil
 
 import imagehash
-from PIL import Image
 import numpy as np
+from PIL import Image
 
 from datumaro.components.project import Project
 

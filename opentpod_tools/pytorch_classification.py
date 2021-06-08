@@ -3,12 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import argparse
-from .pytorch_mobilenet import prepareData as mobilenetprepare
-from .pytorch_resnet import prepareData as resnetprepare
-import torch
 import os
 import shutil
+
+import torch
 from torchvision import datasets, models, transforms
+
+from .pytorch_mobilenet import prepareData as mobilenetprepare
+from .pytorch_resnet import prepareData as resnetprepare
 
 
 def writeInfo(savedir, class_names):

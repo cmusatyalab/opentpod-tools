@@ -10,7 +10,6 @@ import os
 import pathlib
 import re
 import shutil
-
 from string import Template
 
 from logzero import logger

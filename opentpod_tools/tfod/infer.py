@@ -12,9 +12,9 @@ docker run -it --name=test --rm -p 8500:8500 -v $(pwd):/models/myObjectDetector 
 """
 import cv2
 import fire
+import grpc
 import numpy as np
 import tensorflow as tf
-import grpc
 from logzero import logger
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
