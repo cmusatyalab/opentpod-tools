@@ -4,18 +4,17 @@
 
 """Example script to show how to send requests to TF serving to get prediction results
 
-TF server can be started with the following command. The $(pwd) should be where the exported
-model is unzipped.
+TF server can be started with the following command. The $(pwd) should be where
+the exported model is unzipped.
 
 docker run -it --name=test --rm -p 8500:8500 -v $(pwd):/models/myObjectDetector \
--e MODEL_NAME=myObjectDetector tensorflow/serving:latest-gpu
+    -e MODEL_NAME=myObjectDetector tensorflow/serving:latest-gpu
 """
 import cv2
 import fire
 import grpc
 import numpy as np
 import tensorflow as tf
-from logzero import logger
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
@@ -42,7 +41,8 @@ class TFServingPredictor:
     def infer(self, images):
         # Create prediction request object
         request = predict_pb2.PredictRequest()
-        # Specify model name (must be the same as when the TensorFlow serving serving was started)
+        # Specify model name, must be the same as when the TensorFlow serving
+        # serving was started
         request.model_spec.name = self.model_name
         # Initalize prediction
         request.inputs["inputs"].CopyFrom(tf.make_tensor_proto(images))

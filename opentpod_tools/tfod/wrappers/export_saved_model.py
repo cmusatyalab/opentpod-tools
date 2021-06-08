@@ -21,7 +21,7 @@
 # ==============================================================================
 """Functions to export object detection inference graph as a SavedModel for TF serving.
 
-Modified from https://github.com/tensorflow/models/blob/master/research/object_detection/exporter.py
+Modified from https://github.com/tensorflow/models/blob/master/research/object_detection/exporter.py  # noqa: E501 line-too-long
 based on https://github.com/tensorflow/models/issues/1988.
 
 """
@@ -77,7 +77,7 @@ def write_saved_model(saved_model_path, trained_checkpoint_prefix, inputs, outpu
             sess,
             [tf.saved_model.tag_constants.SERVING],
             signature_def_map={
-                tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: detection_signature,
+                tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: detection_signature,  # noqa: E501 line-too-long
             },
         )
         builder.save()
@@ -155,10 +155,10 @@ def _export_inference_graph(
         with tf.gfile.GFile(inference_graph_path, "wb") as f:
             f.write(str(inference_graph_def))
 
-    if additional_output_tensor_names is not None:
-        output_node_names = ",".join(outputs.keys() + additional_output_tensor_names)
-    else:
-        output_node_names = ",".join(outputs.keys())
+    # if additional_output_tensor_names is not None:
+    #     output_node_names = ",".join(outputs.keys() + additional_output_tensor_names)
+    # else:
+    #     output_node_names = ",".join(outputs.keys())
 
     write_saved_model(
         saved_model_path, trained_checkpoint_prefix, placeholder_tensor, outputs

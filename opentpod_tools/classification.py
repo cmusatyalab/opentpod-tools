@@ -30,7 +30,7 @@ def makedataset(resultpath, jsonpath):
     for i in dic["categories"]["label"]["labels"]:
         dirname = i["name"]
         p = os.path.join(resultpath, dirname)
-        dirpath = os.mkdir(p)
+        # dirpath = os.mkdir(p)
         item2label[counter] = p
         counter += 1
 
@@ -41,8 +41,8 @@ def makedataset(resultpath, jsonpath):
         store_name = str(uniqueid) + path_piece
         im = Image.open(imagepath)
         uniqueid += 1
-        height = i["image"]["size"][0]
-        width = i["image"]["size"][1]
+        # height = i["image"]["size"][0]
+        # width = i["image"]["size"][1]
         annoid = 0
         for j in i["annotations"]:
             lid = j["label_id"]

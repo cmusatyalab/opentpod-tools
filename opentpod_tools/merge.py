@@ -10,6 +10,7 @@
 
 import os
 import shutil
+import sys
 from pathlib import Path
 
 import configargparse
@@ -51,8 +52,8 @@ def detect_format(dataset_dir, args):
     if len(matches) == 1:
         return matches[0]
 
-    assert False, f"Unrecognized dataset format, {matches}"
-    return None
+    print(f"Unrecognized dataset format, {matches}")
+    sys.exit(-1)
 
 
 def project_path(dataset_path, suffix):

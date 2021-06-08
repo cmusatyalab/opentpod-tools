@@ -14,15 +14,11 @@ import copy
 import os
 import time
 
-import matplotlib.pyplot as plt
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision
-from PIL import Image
 from torch.optim import lr_scheduler
-from torchvision import datasets, models, transforms
+from torchvision import datasets, transforms
 
 # from logzero import logger
 
@@ -86,7 +82,9 @@ def train_model(
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
 
             print("{} Loss: {:.4f} Acc: {:.4f}".format(phase, epoch_loss, epoch_acc))
-            # logfile.write('{} Loss: {:.4f} Acc: {:.4f}\n'.format(phase, epoch_loss, epoch_acc))
+            # logfile.write(
+            #     "{} Loss: {:.4f} Acc: {:.4f}\n".format(phase, epoch_loss, epoch_acc)
+            # )
             # logfile.flush()
 
             # deep copy the model
@@ -145,7 +143,7 @@ def prepareData(data_dir, num_epochs, model_ft):
     class_names = image_datasets["train"].classes
 
     # ----------------Load model-----------------
-    # model_ft = models.resnet50(pretrained=True) # the downloading model is stored in ~/.cache
+    # model_ft = models.resnet50(pretrained=True) # downloaded model stored in ~/.cache
     num_ftrs = model_ft.classifier[1].in_features
     model_ft.classifier[1] = nn.Linear(
         in_features=num_ftrs, out_features=len(class_names)

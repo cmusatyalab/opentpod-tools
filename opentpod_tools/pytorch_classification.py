@@ -7,7 +7,7 @@ import os
 import shutil
 
 import torch
-from torchvision import datasets, models, transforms
+from torchvision import models
 
 from .pytorch_mobilenet import prepareData as mobilenetprepare
 from .pytorch_resnet import prepareData as resnetprepare
