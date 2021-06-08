@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2020 Carnegie Mellon University
+#
+# SPDX-License-Identifier: Apache-2.0
+
 """Example script to show how to send requests to TF serving to get prediction results
 
 TF server can be started with the following command. The $(pwd) should be where the exported

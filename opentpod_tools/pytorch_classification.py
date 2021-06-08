@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2020 Carnegie Mellon University
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import argparse
 from .pytorch_mobilenet import prepareData as mobilenetprepare
 from .pytorch_resnet import prepareData as resnetprepare

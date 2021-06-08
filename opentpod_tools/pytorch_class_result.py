@@ -1,10 +1,16 @@
+# SPDX-CopyrightText: 2017 PyTorch
+# SPDX-CopyrightText: 2020 Carnegie Mellon University
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 # License: BSD
 # Author: Sasank Chilamkurthy
 # © Copyright 2017, PyTorch
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#sphx-glr-beginner-transfer-learning-tutorial-py
-
+#
 # Modified: Zhen Luan zluan@andrew.cmu.edu
+
 import torch
 import numpy as np
 import torchvision

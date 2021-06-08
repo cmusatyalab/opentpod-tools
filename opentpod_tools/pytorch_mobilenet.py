@@ -1,3 +1,7 @@
+# SPDX-CopyrightText: 2017 PyTorch
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 # License: BSD
 # Author: Sasank Chilamkurthy
 # © Copyright 2017, PyTorch

@@ -1,3 +1,8 @@
+# SPDX-CopyrightText: 2017 The TensorFlow Authors. All Rights Reserved.
+# SPDX-CopyrightText: 2020 Carnegie Mellon University
+#
+# SPDX-License-Identifier: Apache-2.0
+
 # Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 #
 # modified by Junjue Wang <junjuew.cs.cmu.edu>
