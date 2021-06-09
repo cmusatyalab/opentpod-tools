@@ -1,5 +1,5 @@
-# SPDX-CopyrightText: 2017 The TensorFlow Authors. All Rights Reserved.
-# SPDX-CopyrightText: 2020 Carnegie Mellon University
+# SPDX-FileCopyrightText: 2017 The TensorFlow Authors. All Rights Reserved.
+# SPDX-FileCopyrightText: 2020 Carnegie Mellon University
 #
 # SPDX-License-Identifier: Apache-2.0
 

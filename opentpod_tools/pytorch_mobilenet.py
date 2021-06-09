@@ -1,4 +1,4 @@
-# SPDX-CopyrightText: 2017 PyTorch
+# SPDX-FileCopyrightText: 2017 PyTorch
 #
 # SPDX-License-Identifier: BSD-3-Clause
 

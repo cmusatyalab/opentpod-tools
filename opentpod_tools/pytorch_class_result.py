@@ -1,5 +1,5 @@
-# SPDX-CopyrightText: 2017 PyTorch
-# SPDX-CopyrightText: 2020 Carnegie Mellon University
+# SPDX-FileCopyrightText: 2017 PyTorch
+# SPDX-FileCopyrightText: 2020-2021 Carnegie Mellon University
 #
 # SPDX-License-Identifier: BSD-3-Clause
 

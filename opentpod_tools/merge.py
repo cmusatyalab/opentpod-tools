@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 #
-#  Copyright (c) 2020 Carnegie Mellon University
-#  All rights reserved.
+# SPDX-FileCopyrightText: 2020-2021 Carnegie Mellon University
 #
 # SPDX-License-Identifier: Apache-2.0
 #
