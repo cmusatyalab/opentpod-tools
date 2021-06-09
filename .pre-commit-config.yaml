@@ -62,3 +62,4 @@ repos:
     rev: v0.12.1
     hooks:
       - id: reuse
+        name: Check SPDX license tags
