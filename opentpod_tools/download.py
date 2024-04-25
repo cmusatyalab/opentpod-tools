@@ -20,7 +20,9 @@ import requests
 from tqdm.auto import tqdm
 
 
-def cvat_export_dataset(cvat_params, task_id, output, dataset_format, progress=None):
+def cvat_export_dataset(
+    cvat_params, id_, output, dataset_format, class_="task", progress=None
+):
     """Download a dataset from CVAT"""
 
     _format = {
@@ -38,7 +40,7 @@ def cvat_export_dataset(cvat_params, task_id, output, dataset_format, progress=N
         cvat_url, auth = cvat_params
         session.auth = auth
 
-        url = f"{cvat_url}/api/v1/tasks/{task_id}/dataset"
+        url = f"{cvat_url}/api/{class_}s/{id_}/dataset"
         params = {"format": _format}
         creating = True
 
@@ -56,7 +58,7 @@ def cvat_export_dataset(cvat_params, task_id, output, dataset_format, progress=N
                         progress.unit = "B"
                         progress.unit_scale = True
                         progress.unit_divisor = 1024
-                        progress.set_description(f"Download dataset {task_id}")
+                        progress.set_description(f"Download dataset {id_}")
 
                     # download exported dataset
                     with open(output, "wb") as output_file:
@@ -91,33 +93,39 @@ def unzip_dataset(dataset):
 
 
 def _cvat_export_dataset_cli(
-    cvat_params, task_id, dataset_format, position, unzip=True
+    cvat_params, id_, dataset_format, position, class_="task", unzip=True
 ):
     """Download a dataset from CVAT (with progress bar)"""
 
-    output = Path(f"{dataset_format}_{task_id}")
+    output = Path(f"{dataset_format}_{class_}_{id_}")
     output_zip = output.with_suffix(".zip")
     if output.exists():
         print(f"{output} already exists, skipping download")
         return
 
     with tqdm(
-        desc=f"Exporting dataset for task {task_id}",
+        desc=f"Exporting dataset for {class_} {id_}",
         position=position,
         leave=False,
     ) as pbar:
         try:
             cvat_export_dataset(
-                cvat_params, task_id, output_zip, dataset_format, progress=pbar
+                cvat_params,
+                id_,
+                output_zip,
+                dataset_format,
+                class_=class_,
+                progress=pbar,
             )
 
         except requests.exceptions.RequestException as exc:
-            tqdm.write("Failed exporting dataset {}: {}".format(task_id, exc))
+            tqdm.write("Failed exporting dataset {}: {}".format(id_, exc))
             return
 
         if unzip:
-            tqdm.write(f"Unpacking {output_zip}")
+            pbar.set_description(f"Unpacking {output_zip}")
             unzip_dataset(output_zip)
+        tqdm.write(f"Downloaded {output}")
 
 
 def main():
@@ -140,21 +148,35 @@ def main():
         """,
     )
     parser.add_argument(
-        "task_id", type=int, nargs="+", help="task id of dataset to download"
+        "--project", action="store_true", help="Type of dataset (project/task/job)"
+    )
+    parser.add_argument("--task", action="store_true", help="default: task")
+    parser.add_argument("--job", action="store_true")
+    parser.add_argument(
+        "id", type=int, nargs="+", help="project/task/job id of dataset to download"
     )
     args = parser.parse_args()
 
     _auth = (args.username, args.password) if args.username or args.password else None
 
+    if args.project:
+        class_ = "project"
+    elif args.job:
+        class_ = "job"
+    else:  # args.task | default
+        class_ = "task"
+
     export_dataset = partial(
-        _cvat_export_dataset_cli, (args.url, _auth), dataset_format=args.format
+        _cvat_export_dataset_cli,
+        (args.url, _auth),
+        dataset_format=args.format,
+        class_=class_,
+        unzip=not args.no_unzip,
     )
 
     with ThreadPoolExecutor() as pool:
-        for position, task in enumerate(args.task_id, 1):
-            pool.submit(
-                export_dataset, task, position=position, unzip=not args.no_unzip
-            )
+        for position, id_ in enumerate(args.id, 1):
+            pool.submit(export_dataset, id_, position=position)
     print()
 
 

@@ -73,19 +73,6 @@ version.
     poetry install
 ```
 
-Note: Ubuntu 20.04 only has python3.8 by default which we currently don't
-support because some of our dependencies don't support it yet. Tensorflow
-(1.85) is not installable with python-3.8 and torch/torchvision have a
-dependency (dataclasses) that locks us at python-3.6.
-
-As a workaround you can install the python-3.6 release from the deadsnakes PPA.
-
-```sh
-    sudo add-apt-repository ppa:deadsnakes/ppa
-    sudo apt-get update
-    sudo apt-get install python3.6 python3.6-dev
-```
-
 
 ## Usage
 
@@ -98,10 +85,13 @@ Download, merge and cleanup datasets.
     # upload videos to CVAT, and label them
 
     # download labeled datasets
-    $ tpod-download <dataset0> .. <datasetN>
+    $ tpod-download [--project|--task|--job] <dataset0> .. <datasetN>
 
     # merge datasets
-    $ tpod-merge -o merged <dataset0> .. <datasetN>
+    $ datum merge [-o merged] <dataset0> .. <datasetN>
+
+    # filter frames with no annotations (and optionally annotated occlusions)
+    $ tpod-filter [--filter-occluded] [-o filtered] merged
 
     # remove duplication
     $ tpod-unique -l 1 -o unique -p merged [-t 10 -r 0.7]
