@@ -58,20 +58,8 @@ It should be possible to locally build this package as follows,
 ```
 
 This will create a virtualenv with all the dependencies and installs
-opentpod-tools in that virtualenv.  You can start up a shell with the right
-virtualenv environment with `poetry shell` and work from there.
-
-Whenever you update your checked out source tree, it is useful to re-run
-poetry install to pull in any updated dependencies as described in the new
-`poetry.lock` file. If there is a merge conflict on the `poetry.lock` file
-you can remove it and re-run `poetry install` to create a new conflict-free
-version.
-
-```sh
-    cd opentpod-tools
-    git pull
-    poetry install
-```
+opentpod-tools in that virtualenv.  You can start up a shell using the
+installed virtualenv environment with `poetry shell` and work from there.
 
 
 ## Usage
