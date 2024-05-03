@@ -100,20 +100,36 @@ Download, merge and cleanup datasets.
     #              exhaustive, check each new image against all chosen unique images
     # -t --threshold: the difference between current image and unique image(s), default = 10
 
-    # split into training and testing subsets
+    # split into training and validation subsets
     $ datum transform -t random_split -o split unique -- -s train:0.9 -s val:0.1 [-s test:...]
+    $ rmdir split/images || true
 ```
 
 Explore the dataset.
 
 ```sh
     # high level information (# image in trainingset and evaluation set)
-    $ datum project info -p split
+    $ datum dinfo split
 
     # detailed statistics (distribution of labels, area of labeled features, etc.)
-    $ datum project stats -p split
+    $ datum stats split
 ```
 
+Train a yolo object detector.
+
+```sh
+    # export to yolo_ultralytics format
+    $ datum convert -i split -f yolo_ultralytics -o yolo-dataset -- --save-media
+
+    # install Ultralytics YOLOv8 trainer (may already be installed?)
+    $ pip install ultralytics
+
+    # train an object detector model
+    $ yolo detect train data=$(pwd)/yolo-dataset/data.yaml model=yolov8n.pt epochs=100 imgsz=640 project=yolo-project
+```
+
+
+<!---
 Train a tensorflow object detector.
 
 ```sh
@@ -155,3 +171,4 @@ Export for Google AutoML object detection training.
     # export to dataset for google auto ml object detection (not completely done yet)
     $ tpod-google-automl-od -b <bucket name on google cloud platform> -p unique
 ```
+-->
