@@ -153,6 +153,7 @@ def main():
     print(f"Removed {duplicates} similar items")
 
     dataset.save(str(args.output), save_media=args.save_images)
+    datumaro_fixup(args.output)
 
 
 if __name__ == "__main__":

@@ -68,6 +68,7 @@ def main():
         print("REMOVED EMPTY FRAMES", dataset)
 
     filtered_dataset.save(str(args.output), save_media=args.save_images)
+    datumaro_fixup(args.output)
 
 
 if __name__ == "__main__":

@@ -101,7 +101,7 @@ Download, merge and cleanup datasets.
     # -t --threshold: the difference between current image and unique image(s), default = 10
 
     # split into training and testing subsets
-    $ datum project transform -p unique -o split -t random_split -- -s train:0.9 -s eval:0.1
+    $ datum transform -t random_split -o split unique -- -s train:0.9 -s val:0.1 [-s test:...]
 ```
 
 Explore the dataset.
