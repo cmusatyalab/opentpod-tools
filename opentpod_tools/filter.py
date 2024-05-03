@@ -39,9 +39,7 @@ def main():
         default="filtered",
         help="Filtered dataset name (defaults to 'filtered')",
     )
-    parser.add_argument(
-        "dataset", type=Path, help="path of dataset to filter"
-    )
+    parser.add_argument("dataset", type=Path, help="path of dataset to filter")
     args = parser.parse_args()
 
     print("Importing", args.dataset)
@@ -53,19 +51,24 @@ def main():
 
     if args.filter_occluded:
         print("- Removing occluded annotations")
-        dataset = dataset.filter('/item/annotation[occluded="False"]', filter_annotations=True, remove_empty=True)
+        dataset = dataset.filter(
+            '/item/annotation[occluded="False"]',
+            filter_annotations=True,
+            remove_empty=True,
+        )
 
         if args.verbose:
             print("REMOVED OCCLUSIONS", dataset)
 
     # remove frames with no annotations
     print("- Removing empty frames")
-    filtered_dataset = dataset.filter('//*', filter_annotations=True, remove_empty=True)
+    filtered_dataset = dataset.filter("//*", filter_annotations=True, remove_empty=True)
 
     if args.verbose:
         print("REMOVED EMPTY FRAMES", dataset)
 
     filtered_dataset.save(str(args.output), save_media=args.save_images)
+
 
 if __name__ == "__main__":
     main()

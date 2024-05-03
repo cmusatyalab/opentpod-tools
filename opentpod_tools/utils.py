@@ -6,6 +6,7 @@ from pathlib import Path
 
 from datumaro.plugins.data_formats.datumaro.format import DatumaroPath
 
+
 def datumaro_fixup(path: Path) -> None:
     """Datumaro datasets that were exported without copying the media files
     have an empty 'images/' or 'video/' subdirectory which causes problems

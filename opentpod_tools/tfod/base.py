@@ -94,15 +94,13 @@ class TFODDetector:
         cache_entry_dir = utils.get_cache_entry(self.pretrained_model_cache_entry)
         potential_pretained_model_files = list(cache_entry_dir.glob("**/model.ckpt*"))
         if len(potential_pretained_model_files) == 0:
-            raise ValueError(
-                "Failed to find pretrained model in {}".format(cache_entry_dir)
-            )
+            raise ValueError(f"Failed to find pretrained model in {cache_entry_dir}")
         fine_tune_model_dir = potential_pretained_model_files[0].parent
         return os.fspath(fine_tune_model_dir / "model.ckpt")
 
     def prepare_config(self):
         # num_classes are the number of classes to learn
-        with open(self._config["label_map_path"], "r") as f:
+        with open(self._config["label_map_path"]) as f:
             content = f.read()
             labels = re.findall(r"\tname: '(.+?)'\n", content)
             self._config["num_classes"] = len(labels)
@@ -110,9 +108,9 @@ class TFODDetector:
         # fine_tune_checkpoint should point to the path of the checkpoint from
         # which transfer learning is done
         if self._config.get("fine_tune_checkpoint", None) is None:
-            self._config[
-                "fine_tune_checkpoint"
-            ] = self.get_pretrained_model_checkpoint()
+            self._config["fine_tune_checkpoint"] = (
+                self.get_pretrained_model_checkpoint()
+            )
 
         # use default values for training parameters if not given
         for parameter, value in self.training_parameters.items():
@@ -159,7 +157,7 @@ class TFODDetector:
         argv = [
             "",
             "--pipeline_config_path={}".format(self._config["pipeline_config_path"]),
-            "--model_dir={}".format(self._output_dir),
+            f"--model_dir={self._output_dir}",
             "--alsologtostderr",
         ]
         logger.info(

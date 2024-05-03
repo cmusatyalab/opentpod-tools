@@ -8,7 +8,6 @@
 # https://github.com/pytorch/tutorials/blob/master/beginner_source/transfer_learning_tutorial.py
 # https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html#sphx-glr-beginner-transfer-learning-tutorial-py
 
-from __future__ import division, print_function
 
 import copy
 import os
@@ -35,7 +34,7 @@ def train_model(
     # logfile = open(loggerfile, "w")
 
     for epoch in range(num_epochs):
-        print("Epoch {}/{}".format(epoch, num_epochs - 1))
+        print(f"Epoch {epoch}/{num_epochs - 1}")
         print("-" * 10)
         # logfile.write('Epoch {}/{}\n'.format(epoch, num_epochs - 1))
         # logfile.write('-' * 10)
@@ -80,7 +79,7 @@ def train_model(
             epoch_loss = running_loss / dataset_sizes[phase]
             epoch_acc = running_corrects.double() / dataset_sizes[phase]
 
-            print("{} Loss: {:.4f} Acc: {:.4f}".format(phase, epoch_loss, epoch_acc))
+            print(f"{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}")
             # logfile.write(
             #     "{} Loss: {:.4f} Acc: {:.4f}\n".format(phase, epoch_loss, epoch_acc)
             # )
@@ -97,7 +96,7 @@ def train_model(
             time_elapsed // 60, time_elapsed % 60
         )
     )
-    print("Best val Acc: {:4f}".format(best_acc))
+    print(f"Best val Acc: {best_acc:4f}")
     # logfile.write(
     #     "Training complete in {:.0f}m {:.0f}s\n".format(
     #         time_elapsed // 60, time_elapsed % 60

@@ -94,10 +94,10 @@ Download, merge and cleanup datasets.
     $ tpod-filter [--filter-occluded] [-o filtered] merged
 
     # remove duplication
-    $ tpod-unique -l 1 -o unique -p merged [-t 10 -r 0.7]
-    # -l --level: 1 continuous checking, always check the last unique image
-    #             2 random checking, generate random set of unique image list with [-r/--ratio]
-    #             3 complete checking, check the complete unique image list
+    $ tpod-unique [-m sequential|random|complete] [-o unique] merged [-t 10 -r 0.7]
+    # -m --method: sequential, only check against the last 'unique' image
+    #              random, check against random subset of unique image list with [-r/--ratio]
+    #              exhaustive, check each new image against all chosen unique images
     # -t --threshold: the difference between current image and unique image(s), default = 10
 
     # split into training and testing subsets

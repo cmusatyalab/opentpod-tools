@@ -119,7 +119,7 @@ def _cvat_export_dataset_cli(
             )
 
         except requests.exceptions.RequestException as exc:
-            tqdm.write("Failed exporting dataset {}: {}".format(id_, exc))
+            tqdm.write(f"Failed exporting dataset {id_}: {exc}")
             return
 
         if unzip:

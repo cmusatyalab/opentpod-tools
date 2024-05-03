@@ -27,9 +27,7 @@ class TFServingPredictor:
             ("grpc.max_send_message_length", 500 * 1024 * 1024),
             ("grpc.max_receive_message_length", 500 * 1024 * 1024),
         ]
-        self.channel = grpc.insecure_channel(
-            "{}:{}".format(host, int(port)), options=options
-        )
+        self.channel = grpc.insecure_channel(f"{host}:{int(port)}", options=options)
         self.stub = prediction_service_pb2_grpc.PredictionServiceStub(self.channel)
         self.model_name = model_name
 

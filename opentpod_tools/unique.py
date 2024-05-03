@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-#  Copyright (c) 2018-2020 Carnegie Mellon University
+#  Copyright (c) 2018-2024 Carnegie Mellon University
 #  All rights reserved.
 #
 # Based on work by Junjue Wang.
@@ -13,21 +13,14 @@
 from __future__ import annotations
 
 import argparse
-import functools
-import json
-import os
 import random
-import shutil
 from pathlib import Path
-from typing import Literal
 
 import datumaro as dm
+import imagehash
 from datumaro.components.dataset_base import IDataset
 from datumaro.components.media import Image as dmImage
 from datumaro.components.transformer import ItemTransform
-
-import imagehash
-import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
@@ -64,19 +57,24 @@ class DedupTransform(ItemTransform):
         )
         return parser
 
-    def __init__(self, extractor: IDataset, dedup_method: str = "sequential", threshold: int = DIFF_THRESHOLD, ratio: float = DEFAULT_RATIO):
+    def __init__(
+        self,
+        extractor: IDataset,
+        dedup_method: str = "sequential",
+        threshold: int = DIFF_THRESHOLD,
+        ratio: float = DEFAULT_RATIO,
+        progress=None,
+    ):
         super().__init__(extractor)
         self._method = dedup_method
         self._threshold = threshold
         self._ratio = ratio
         self._deduped = []
+        self._progress = progress
 
     @staticmethod
     def _compute_image_hash(image):
-        print(image.path)
         im = Image.fromarray(image.data)
-        #a = np.asarray(image)
-        #im = Image.fromarray(a)
         return imagehash.phash(im)
 
     @property
@@ -94,6 +92,9 @@ class DedupTransform(ItemTransform):
     def transform_item(self, item):
         image_hash = self._compute_image_hash(item.media_as(dmImage))
 
+        if self._progress is not None:
+            self._progress.update()
+
         for check_hash in self.check_list:
             if (image_hash - check_hash) < self._threshold:
                 return None
@@ -104,13 +105,15 @@ class DedupTransform(ItemTransform):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-o", "--output", type=Path, default="unique", help="Output dataset")
     parser.add_argument(
-        "-l",
-        "--level",
-        required=True,
-        type=int,
-        help="1(continuous checking) 2(random checking) 3(complete checking)",
+        "-o", "--output", type=Path, default="unique", help="Output dataset"
+    )
+    parser.add_argument(
+        "-m",
+        "--method",
+        choices=["sequential", "random", "exhaustive"],
+        default="sequential",
+        help="amount of effort spent to look for possible duplicates",
     )
     parser.add_argument(
         "-t",
@@ -131,70 +134,25 @@ def main():
 
     args = parser.parse_args()
 
-    if args.level == 1:
-        method = "sequential"
-    elif args.level == 2:
-        method = "random"
-    elif args.level == 3:
-        method = "exhaustive"
-    else:
-        raise Exception("No suitable level found")
-
-
     datumaro_fixup(args.dataset)
     dataset = dm.Dataset.import_from(str(args.dataset))
 
-    deduped_dataset = dataset.transform(
-        DedupTransform,
-        dedup_method=method,
-        threshold=args.threshold,
-        ratio=args.ratio,
-    )
+    dataset_len = len(dataset)
+    with tqdm(total=dataset_len) as pbar:
+        dataset = dataset.transform(
+            DedupTransform,
+            dedup_method=args.method,
+            threshold=args.threshold,
+            ratio=args.ratio,
+            progress=pbar,
+        )
 
-    duplicates = len(dataset) - len(deduped_dataset)
+        # the transform is lazily executed when we look at the data items, in
+        # this case calling len() actually triggers processing all transforms
+        duplicates = dataset_len - len(dataset)
     print(f"Removed {duplicates} similar items")
 
-    deduped_dataset.save(str(args.output), save_media=args.save_images)
-
-    import sys
-    sys.exit()
-
-    annotations = json.loads(
-        args.dataset.joinpath("annotations", "default.json").read_text()
-    )
-
-    base_image_list = []
-    if args.level == 1:
-        check_dup = functools.partial(checkDiff, base_image_list, args.threshold)
-
-    elif args.level == 2:
-        check_dup = functools.partial(checkDiffRandom, base_image_list, args.ratio, args.threshold)
-
-    elif args.level == 3:
-        check_dup = functools.partial(checkDiffComplete, base_image_list, args.threshold)
-
-    result = []
-    for i in tqdm(annotations["items"]):
-        imgpath = i["image"]["path"]
-        im = Image.open(imgpath)
-        a = np.asarray(im)
-        im = Image.fromarray(a)
-        image_hash = imagehash.phash(im)
-
-        if base_image_list and check_dup(image_hash):
-            continue
-
-        base_image_list.append(image_hash)
-        result.append(i)
-
-    duplicates = len(dataset) - len(result)
-    print(f"Removed {duplicates} similar items")
-
-    data = annotations.copy()
-    data["items"] = result
-
-    #with args.output.joinpath("annotations", "default.json").open("w") as fp:
-    #    json.dump(data, fp)
+    dataset.save(str(args.output), save_media=args.save_images)
 
 
 if __name__ == "__main__":

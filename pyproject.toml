@@ -26,16 +26,16 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.8"
 ConfigArgParse = "^1.2.3"
-datumaro = { version = "^1.4.0", extras = ["default"] }
-imagehash = "^4.1.0"
+datumaro = { version = "^1.5.2", extras = ["default"] }
+imagehash = "^4.3.1"
 logzero = "^1.6.2"
 requests = "^2.24.0"
-tqdm = "^4.50.2"
+tqdm = "^4.66.2"
+
 #tensorflow-gpu = "~1.15.4"
 #tf-object-detection = { version = "^0.0.3", extras = ["tf-gpu"] }
 #torch = "^1.7.0"
 #torchvision = "^0.8.1"
-
 # indirect dependency cuda-python-12.4.0 was released with
 # no wheels for python 3.8
 #cuda-python = { version = "<12.4.0", python = "<3.9" }
@@ -54,16 +54,14 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 tpod-download = "opentpod_tools.download:main"
 tpod-filter = "opentpod_tools.filter:main"
-tpod-unique = "opentpod_tools.removedup:main"
+tpod-unique = "opentpod_tools.unique:main"
+
 tpod-class = "opentpod_tools.classification:main"
 tpod-google-automl-od = "opentpod_tools.google_automl_od:main"
 tpod-pytorch-class = "opentpod_tools.pytorch_classification:main"
 tpod-pytorch-class-test = "opentpod_tools.pytorch_class_result:main"
 tpod-tfod-training = "opentpod_tools.tfod_training:main"
 tpod-tfod-freeze = "opentpod_tools.tfod.freezer:main"
-
-# datumaro
-datum = "datumaro.cli.__main__:main"
 
 [tool.poetry.urls]
 issues = "https://github.com/cmusatyalab/opentpod-tools/issues"

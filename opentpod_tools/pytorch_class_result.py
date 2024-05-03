@@ -22,7 +22,7 @@ from torchvision import transforms
 
 def getItemInfo(infopath):
     infodict = {}
-    fp = open(infopath, "r")
+    fp = open(infopath)
     info = fp.read().split()
     for i in info:
         index2item = i.split(":")

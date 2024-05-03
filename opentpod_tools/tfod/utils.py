@@ -56,7 +56,7 @@ def download_and_extract_url_tarball_to_cache_dir(tarball_url, entry_name):
                     for chunk in response.iter_content(chunk_size=4096):
                         output_file.write(chunk)
                         progress.update(len(chunk))
-            except IOError as exc:
+            except OSError as exc:
                 output_file.unlink()
                 logger.exception(exc)
                 raise exc

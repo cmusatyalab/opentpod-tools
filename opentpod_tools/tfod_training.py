@@ -33,7 +33,7 @@ def main():
     args = parser.parse_args()
 
     # collect arguments, drop unspecified ones
-    config = dict((k, v) for k, v in vars(args).items() if v is not None)
+    config = {k: v for k, v in vars(args).items() if v is not None}
 
     instance = REGISTRY[args.model](config)
     instance.prepare()
