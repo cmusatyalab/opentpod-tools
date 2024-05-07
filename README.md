@@ -90,7 +90,6 @@ Download, merge and cleanup datasets.
 
     # split into training and validation subsets
     $ datum transform -t random_split -o split unique -- -s train:0.9 -s val:0.1 [-s test:...]
-    $ rmdir split/images || true
 ```
 
 Explore the dataset.
@@ -103,14 +102,13 @@ Explore the dataset.
     $ datum stats split
 ```
 
-Train a yolo object detector.
+To train a yolo object detector.  Install (reinstall) opentpod-tools with yolo
+extra dependencies (poetry install -E yolo / pip install ...[yolo]), or
+`pip install ultralytics` where you will do the training.
 
 ```sh
     # export to yolo_ultralytics format
     $ datum convert -i split -f yolo_ultralytics -o yolo-dataset -- --save-media
-
-    # install Ultralytics YOLOv8 trainer (may already be installed?)
-    $ pip install ultralytics
 
     # train an object detector model
     $ yolo detect train data=$(pwd)/yolo-dataset/data.yaml model=yolov8n.pt epochs=100 imgsz=640 project=yolo-project

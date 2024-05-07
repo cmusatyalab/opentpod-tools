@@ -32,6 +32,8 @@ logzero = "^1.6.2"
 requests = "^2.24.0"
 tqdm = "^4.66.2"
 
+ultralytics = { version = "^8.0.0", optional = true }
+
 #tensorflow-gpu = "~1.15.4"
 #tf-object-detection = { version = "^0.0.3", extras = ["tf-gpu"] }
 #torch = "^1.7.0"
@@ -40,15 +42,15 @@ tqdm = "^4.66.2"
 # no wheels for python 3.8
 #cuda-python = { version = "<12.4.0", python = "<3.9" }
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.extras]
+yolo = ["ultralytics"]
+
+[tool.poetry.group.dev.dependencies]
 black = "^20.8b1"
 flake8 = "^3.8.4"
 isort = "^5.6.4"
 pylint = "^2.6.0"
 pytest = "^5.2"
-
-[tool.poetry.group.yolo.dependencies]
-ultralytics = "^8.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -59,12 +61,12 @@ tpod-download = "opentpod_tools.download:main"
 tpod-filter = "opentpod_tools.filter:main"
 tpod-unique = "opentpod_tools.unique:main"
 
-tpod-class = "opentpod_tools.classification:main"
-tpod-google-automl-od = "opentpod_tools.google_automl_od:main"
-tpod-pytorch-class = "opentpod_tools.pytorch_classification:main"
-tpod-pytorch-class-test = "opentpod_tools.pytorch_class_result:main"
-tpod-tfod-training = "opentpod_tools.tfod_training:main"
-tpod-tfod-freeze = "opentpod_tools.tfod.freezer:main"
+#tpod-class = "opentpod_tools.classification:main"
+#tpod-google-automl-od = "opentpod_tools.google_automl_od:main"
+#tpod-pytorch-class = "opentpod_tools.pytorch_classification:main"
+#tpod-pytorch-class-test = "opentpod_tools.pytorch_class_result:main"
+#tpod-tfod-training = "opentpod_tools.tfod_training:main"
+#tpod-tfod-freeze = "opentpod_tools.tfod.freezer:main"
 
 [tool.poetry.urls]
 issues = "https://github.com/cmusatyalab/opentpod-tools/issues"

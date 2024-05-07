@@ -137,8 +137,8 @@ def main():
     datumaro_fixup(args.dataset)
     dataset = dm.Dataset.import_from(str(args.dataset))
 
-    dataset_len = len(dataset)
-    with tqdm(total=dataset_len) as pbar:
+    pre_len = len(dataset)
+    with tqdm(total=pre_len) as pbar:
         dataset = dataset.transform(
             DedupTransform,
             dedup_method=args.method,
@@ -149,8 +149,10 @@ def main():
 
         # the transform is lazily executed when we look at the data items, in
         # this case calling len() actually triggers processing all transforms
-        duplicates = dataset_len - len(dataset)
-    print(f"Removed {duplicates} similar items")
+        cur_len = len(dataset)
+    print(
+        f"Removed {pre_len - cur_len} similar images, leaving {cur_len} unique images"
+    )
 
     dataset.save(str(args.output), save_media=args.save_images)
     datumaro_fixup(args.output)
