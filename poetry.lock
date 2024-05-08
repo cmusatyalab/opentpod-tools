@@ -955,23 +955,27 @@ test-randomorder = ["pytest-randomly"]
 
 [[package]]
 name = "cuda-python"
-version = "12.4.0"
+version = "12.3.0"
 description = "Python bindings for CUDA"
 optional = false
 python-versions = "*"
 files = [
-    {file = "cuda_python-12.4.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3a9ddcbfe14a9b38eedf7e98323f680acc8c61ed6529638da2c7d4a5a8787e12"},
-    {file = "cuda_python-12.4.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d9e1a2cf38d71be0c85f1063967409b48badc06fb4294dd72fdf05de852f42fb"},
-    {file = "cuda_python-12.4.0-cp310-cp310-win_amd64.whl", hash = "sha256:8d505667cae5f793435dbe5fcaab4bff4a2a3029024148ce16e4003bae43cf45"},
-    {file = "cuda_python-12.4.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e845338ad9634be2778b787f12f3a05b0116d49610a9a517f017fd91e79b1b97"},
-    {file = "cuda_python-12.4.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6dde31841f204f3de78e5e121252f7c43f1cfcf207ff3a0cf1d1017acb08dabf"},
-    {file = "cuda_python-12.4.0-cp311-cp311-win_amd64.whl", hash = "sha256:43d92a8f7531c5fa8d9d68e24b36dd352d1653353791583c4a3b10a629176fd4"},
-    {file = "cuda_python-12.4.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:84cd4f3a174fc116a6c1496efb3d60a7d4dce791194456461582908653ac67b2"},
-    {file = "cuda_python-12.4.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dcf44462196af79e34d2516f4416c5e46691a4d6b9faa13e75664115bdc40d4c"},
-    {file = "cuda_python-12.4.0-cp312-cp312-win_amd64.whl", hash = "sha256:07db8b89ac34ba4520b070f8de971f0266229fabe2443608ca91a8b93d572c09"},
-    {file = "cuda_python-12.4.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f2202ed9793c5948282e4e575e8227c127adb29e21fd31cb6d80098f93a2c14e"},
-    {file = "cuda_python-12.4.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7146ed28810c28704649204f83ca60a9609263b3e8f08f77a33e154501cd84dd"},
-    {file = "cuda_python-12.4.0-cp39-cp39-win_amd64.whl", hash = "sha256:de0a2cb4ce6ea8e302010a580576ab78a2e95d015963e0d6933bb2508f65bd6a"},
+    {file = "cuda_python-12.3.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:45285ec0f0dc4fe604b3568e77ba3363d3ce531ac9f9a5510d2276ad46ef143f"},
+    {file = "cuda_python-12.3.0-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:a6f666d01e573454cbd38495911fe25686849e5996f140d9b756f02f93e19e43"},
+    {file = "cuda_python-12.3.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7560ea424044420a2762559832e392e48317889db62c5da7e8957b1907996d32"},
+    {file = "cuda_python-12.3.0-cp310-cp310-win_amd64.whl", hash = "sha256:02f392dbb320731cf89a02a2540db84e4beb27f900d4128e407c33d20adc7c8e"},
+    {file = "cuda_python-12.3.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:0f4784d5f9cbf7239d00e8abcad56bf9130c0274ac20976a0e5c71d02324a42b"},
+    {file = "cuda_python-12.3.0-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:c02922b14f12aeae9388aef4d0f633bde5225a818a0bfc9cade61bcf7a65e69c"},
+    {file = "cuda_python-12.3.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0a27dd9cb84000e3812d797de631fefcff5470ddfc30f4110aba1eccf8c32f68"},
+    {file = "cuda_python-12.3.0-cp311-cp311-win_amd64.whl", hash = "sha256:01579e5cf7959e7759e2f23232e2e53167c1cf2461b0ba73a3c2cb03602d54af"},
+    {file = "cuda_python-12.3.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c1ef4fae871533942e35ebff86be9f7b74e5f75c602c93200e419668191899c3"},
+    {file = "cuda_python-12.3.0-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:b5f79e9a37e7cc8b70e511bfbf3ca6f72479928ac9fdc3c398eaba7a53a8da15"},
+    {file = "cuda_python-12.3.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9740518a875715b77c52215e74d09fdc2dc02c8080db8052e6b1bc16d96557f9"},
+    {file = "cuda_python-12.3.0-cp38-cp38-win_amd64.whl", hash = "sha256:3113e83d0b596d393a32fe4fcd2461f905ce3dc4e6bc9e6d2fd451834b2fc167"},
+    {file = "cuda_python-12.3.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a55005abb6597b4f24cf6d20e7e0debb8d29023d6456337e0129717ecf669864"},
+    {file = "cuda_python-12.3.0-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:59f67d9f6d461c78a5552044b9660759b84d949b506afc7c797b18c12d49f967"},
+    {file = "cuda_python-12.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:386b9c823fb41fc305dcb5074336c9e74863813fa84d9c7394f4fc068a2b1e2f"},
+    {file = "cuda_python-12.3.0-cp39-cp39-win_amd64.whl", hash = "sha256:4409591a627ae400a1ef5e1635d5a57b45488599d1ef16248cdbc960cb6b9f3f"},
 ]
 
 [[package]]
@@ -5236,13 +5240,13 @@ files = [
 
 [[package]]
 name = "tomlkit"
-version = "0.12.4"
+version = "0.12.5"
 description = "Style preserving TOML library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "tomlkit-0.12.4-py3-none-any.whl", hash = "sha256:5cd82d48a3dd89dee1f9d64420aa20ae65cfbd00668d6f094d7578a78efbb77b"},
-    {file = "tomlkit-0.12.4.tar.gz", hash = "sha256:7ca1cfc12232806517a8515047ba66a19369e71edf2439d0f5824f91032b6cc3"},
+    {file = "tomlkit-0.12.5-py3-none-any.whl", hash = "sha256:af914f5a9c59ed9d0762c7b64d3b5d5df007448eb9cd2edc8a46b1eafead172f"},
+    {file = "tomlkit-0.12.5.tar.gz", hash = "sha256:eef34fba39834d4d6b73c9ba7f3e4d1c417a4e56f89a7e96e090dd0d24b8fb3c"},
 ]
 
 [[package]]
@@ -5499,13 +5503,13 @@ files = [
 
 [[package]]
 name = "ultralytics"
-version = "8.2.10"
+version = "8.2.11"
 description = "Ultralytics YOLOv8 for SOTA object detection, multi-object tracking, instance segmentation, pose estimation and image classification."
 optional = true
 python-versions = ">=3.8"
 files = [
-    {file = "ultralytics-8.2.10-py3-none-any.whl", hash = "sha256:8c0d3016154ab27998098eefc645ab35158c7d173d5b62ff61997b03b001763a"},
-    {file = "ultralytics-8.2.10.tar.gz", hash = "sha256:7a9c189e2c10667928f51f9746961674c21d30deb11c7c865f3f8e07d0509968"},
+    {file = "ultralytics-8.2.11-py3-none-any.whl", hash = "sha256:c60db27898bb994c14c64625db368521779b2ce904e9ea9b4f03013fc599b053"},
+    {file = "ultralytics-8.2.11.tar.gz", hash = "sha256:7d420b01b0414f4238156f2572bbaf419df0cf3f07de1e3e65029cbdd5d28eaf"},
 ]
 
 [package.dependencies]
@@ -5872,4 +5876,4 @@ yolo = ["ultralytics"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "9de05bdf6209ec94837f62b6950b3276f1cff4d1cf6e07991340233752ff5d88"
+content-hash = "f2ca31dd9abe17fc3c03b93e7e49e6bcb876bd0e1a991792b6ec42693e8b01d8"
