@@ -103,8 +103,9 @@ Explore the dataset.
 ```
 
 To train a yolo object detector.  Install (reinstall) opentpod-tools with yolo
-extra dependencies (poetry install -E yolo / pip install ...[yolo]), or
-`pip install ultralytics` where you will do the training.
+extra dependencies (`poetry install -E yolo`,
+`pip install git+https://github.com/cmusatyalab/opentpod-tools.git#egg=opentpod-tools[yolo]`,
+or `pip install ultralytics`) where you will do the training.
 
 ```sh
     # export to yolo_ultralytics format
