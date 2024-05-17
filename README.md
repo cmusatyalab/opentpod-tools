@@ -102,9 +102,21 @@ Explore the dataset.
     $ datum stats split
 ```
 
-To train a yolo object detector.  Install (reinstall) opentpod-tools with yolo
-extra dependencies (poetry install -E yolo / pip install git+https://github.com/cmusatyalab/opentpod-tools.git#egg=opentpod-tools[yolo]), or
-`pip install ultralytics` where you will do the training.
+To train a yolo object detector.  Install (reinstall) opentpod-tools with the
+yolo training extra dependencies where you will do the training.
+
+```sh
+    # when installing from the source tree with poetry
+    poetry install -E yolo
+
+    # when installing from the github repository with pip
+    pip install git+https://github.com/cmusatyalab/opentpod-tools.git#egg=opentpod-tools[yolo]
+
+    # or, just install the yolo dependency
+    pip install ultralytics
+```
+
+Then we can export our dataset to the proper format and train a yolo object detector.
 
 ```sh
     # export to yolo_ultralytics format
