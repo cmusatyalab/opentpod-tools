@@ -14,9 +14,11 @@ import zipfile
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from pathlib import Path
+from urllib.parse import urljoin
 
 import configargparse
 import requests
+from requests.exceptions import RequestException
 from tqdm.auto import tqdm
 
 
@@ -40,7 +42,7 @@ def cvat_export_dataset(
         cvat_url, auth = cvat_params
         session.auth = auth
 
-        url = f"{cvat_url}/api/{class_}s/{id_}/dataset"
+        url = urljoin(cvat_url, f"api/{class_}s/{id_}/dataset")
         params = {"format": _format}
         creating = True
 
@@ -50,6 +52,9 @@ def cvat_export_dataset(
                 response.raise_for_status()
 
                 if response.status_code == 200:
+                    if response.headers["Content-Type"] != "application/zip":
+                        raise RequestException("Unexpected response content type")
+
                     # file is ready for download
                     # switch progress bar from 'waiting for' to 'downloading'
                     if progress is not None:
